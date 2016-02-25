@@ -18,14 +18,14 @@ typedef struct {
 } Floodinfo;
 
 static Floodinfo flood_info[] = {
-  {.area = "Jakarta North", .source = "Twitter", .description = "Tsunami"},
-  {.area = "Jakarta East", .source = "Qlue", .description = "Tsunami big"},
-  {.area = "Jakarta South", .source = "Facebook", .description = "Tsunami bigger"},
-  {.area = "Jakarta West", .source = "Twitter", .description = "Tsunami biggest"},
-  {.area = "Jakarta Central", .source = "Qlue", .description = "Tsunami small"},
-  {.area = "Jakarta North", .source = "Twitter", .description = "Tsunami smaller"},
-  {.area = "Jakarta East", .source = "Twitter", .description = "Tsunami smallest"},
-  {.area = "Jakarta North", .source = "Twitter", .description = "Tsunami apocalypse"}
+  {.area = "Jakarta North", .source = "Twitter", .description = "Flood"},
+  {.area = "Jakarta East", .source = "Qlue", .description = "Flood big"},
+  {.area = "Jakarta South", .source = "Facebook", .description = "Flood bigger"},
+  {.area = "Jakarta West", .source = "Twitter", .description = "Flood biggest"},
+  {.area = "Jakarta Central", .source = "Qlue", .description = "Flood small"},
+  {.area = "Jakarta North", .source = "Twitter", .description = "Flood smaller"},
+  {.area = "Jakarta East", .source = "Twitter", .description = "Flood smallest"},
+  {.area = "Jakarta North", .source = "Twitter", .description = "Floods"}
 };
 
 // Define the App elemments for the Main Window and Report window
