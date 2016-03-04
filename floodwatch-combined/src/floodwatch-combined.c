@@ -1,14 +1,14 @@
 #include <pebble.h>
+#include <string.h>
+
 
 #define Num_menu_sections 2
 #define Num_menu_icons 3
-#define Num_first_menu_items 4
+#define Num_first_menu_items 3
 #define Num_second_menu_items 1
 
-#define KEY_NUMBER 0
 #define KEY_AREA 1
 #define KEY_SOURCE 2
-#define KEY_DESCRIPTION 3
 
 
 typedef struct {
@@ -18,14 +18,7 @@ typedef struct {
 } Floodinfo;
 
 static Floodinfo flood_info[] = {
-  {.area = "Jakarta North", .source = "Twitter", .description = "Flood"},
-  {.area = "Jakarta East", .source = "Qlue", .description = "Flood big"},
-  {.area = "Jakarta South", .source = "Facebook", .description = "Flood bigger"},
-  {.area = "Jakarta West", .source = "Twitter", .description = "Flood biggest"},
-  {.area = "Jakarta Central", .source = "Qlue", .description = "Flood small"},
-  {.area = "Jakarta North", .source = "Twitter", .description = "Flood smaller"},
-  {.area = "Jakarta East", .source = "Twitter", .description = "Flood smallest"},
-  {.area = "Jakarta North", .source = "Twitter", .description = "Floods"}
+  {.area = "google"}
 };
 
 // Define the App elemments for the Main Window and Report window
@@ -33,47 +26,66 @@ static Window *main_window, *report_window, *contact_window;
 static TextLayer *title_layer, *region_layer;
 static MenuLayer *menu_layer;
 static TextLayer *s_weather_layer;
+static TextLayer *contact_layer;
+
 
 //Create variable to store the index of the currenly selected menu item
 static int current_icon = 0;
 static int floodcount = 0;
-
-static char pkey_buffer[8];
+// Store incoming information
 static char area_buffer[32];
 static char source_buffer[32];
-static char description_buffer[32];
 static char weather_layer_buffer[32];
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   // Store incoming information
-  static char pkey_buffer[8];
   static char area_buffer[32];
   static char source_buffer[32];
-  static char description_buffer[32];
   static char weather_layer_buffer[32];
+  char *area_temp;
+  char *source_temp;
+  const char delim[2] = ",";
+  int token_count = 0;
 
   // Read tuples for data
-  Tuple *pkey_tuple = dict_find(iterator, KEY_NUMBER);
   Tuple *area_tuple = dict_find(iterator, KEY_AREA);
   Tuple *source_tuple = dict_find(iterator, KEY_SOURCE);
-  Tuple *description_tuple = dict_find(iterator, KEY_DESCRIPTION);
 
   // If all data is available, use it
-  if(pkey_tuple == NULL) {
+  if(area_tuple == NULL) {
 
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "No Floods at the moment");
-    text_layer_set_text(s_weather_layer, weather_layer_buffer);
+    //text_layer_set_text(contact_layer, weather_layer_buffer);
   }
   else{
-    snprintf(pkey_buffer, sizeof(pkey_buffer), "# %d", (int)pkey_tuple->value->int32);
     snprintf(area_buffer, sizeof(area_buffer), "%s", area_tuple->value->cstring);
     snprintf(source_buffer, sizeof(source_buffer), "%s", source_tuple->value->cstring);
-    snprintf(description_buffer, sizeof(description_buffer), "%s", description_tuple->value->cstring);
 
     // Assemble full string and display
-    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s\n%s\nDescription to be fixed",area_buffer,source_buffer);
-    text_layer_set_text(s_weather_layer, weather_layer_buffer);
-    //%s\n%s\nSource:\n %s", pkey_buffer, area_buffer,source_buffer
+    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s\n%s\n",area_buffer,source_buffer);
+
+    /* get the first token */
+      area_temp = strtok(area_buffer, delim);
+
+      /* walk through other tokens */
+      while( area_temp != NULL )
+      {
+         flood_info[token_count].area= area_temp;
+       token_count++;
+         area_temp = strtok(NULL, delim);
+      }
+
+      token_count = 0;
+      source_temp = strtok(source_buffer, delim);
+
+      /* walk through other tokens */
+      while( source_temp != NULL )
+      {
+         flood_info[token_count].area= source_temp;
+       token_count++;
+         source_temp = strtok(NULL, delim);
+      }
+
   }
 }
 
@@ -130,12 +142,9 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
           menu_cell_basic_draw(ctx, cell_layer, "Floods In Area","",NULL);
           break;
         case 1:
-          menu_cell_basic_draw(ctx, cell_layer, "Banjir Twitter", "Report flood", NULL);
-          break;
-        case 2:
           menu_cell_basic_draw(ctx, cell_layer, "Emergency Contacts", "SOS", NULL);
           break;
-        case 3:
+        case 2:
             menu_cell_basic_draw(ctx, cell_layer, "Configure App", "Select", NULL);
           break;
       }
@@ -146,24 +155,15 @@ static void select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, vo
   current_icon = cell_index->row;
   switch (cell_index->row){
     case 0:
-    vibes_short_pulse();
+      vibes_short_pulse();
       window_stack_push(report_window, true);
-
       break;
     case 1:
-    vibes_short_pulse();
-      window_stack_push(report_window, true);
-
+      vibes_short_pulse();
+      window_stack_push(contact_window, true);
       break;
     case 2:
-    vibes_short_pulse();
-      window_stack_push(contact_window, true);
-
-      break;
-    case 3:
-    vibes_short_pulse();
-      window_stack_push(report_window, true);
-
+      vibes_short_pulse();
       break;
     }
 
@@ -239,9 +239,6 @@ static void main_window_unload(Window *window) {
   static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
     window_set_background_color(report_window, GColorRajah);
 
-    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s\n%s\n%s",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
-    text_layer_set_text(s_weather_layer, weather_layer_buffer);
-
   }
 
   static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -264,10 +261,11 @@ static void main_window_unload(Window *window) {
 
   static void report_window_load(Window *window) {
 
-    window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
+  window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
     // Get information about the Window
     Layer *window_layer = window_get_root_layer(window);
     GRect bounds = layer_get_bounds(window_layer);
+
 
     s_weather_layer = text_layer_create(
         GRect(0, 50, bounds.size.w, bounds.size.h));
@@ -277,44 +275,39 @@ static void main_window_unload(Window *window) {
     text_layer_set_text_color(s_weather_layer, GColorBlack);
     text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
     text_layer_set_overflow_mode(s_weather_layer, GTextOverflowModeWordWrap);
-    text_layer_set_text(s_weather_layer, "Loading...");
+    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s\n%s\n%s",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
+    text_layer_set_text(s_weather_layer, weather_layer_buffer);
+    //text_layer_set_text(s_weather_layer, "Loading...");
     text_layer_set_font(s_weather_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
 
+
     // Create flood Layer
-
-
     layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_weather_layer));
   }
 
   static void report_window_unload(Window *window) {
     layer_remove_child_layers(window_get_root_layer(window));
-
-    // Destroy weather elements
     text_layer_destroy(s_weather_layer);
 }
 
 static void contact_window_load(Window *window) {
-
-  window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
-  // Get information about the Window
+// Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  s_weather_layer = text_layer_create(
+  contact_layer = text_layer_create(
       GRect(0, 20, bounds.size.w, bounds.size.h));
 
-
-
   // Style the text
-  text_layer_set_background_color(s_weather_layer, GColorClear);
-  text_layer_set_text_color(s_weather_layer, GColorWhite);
-  text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
-  text_layer_set_overflow_mode(s_weather_layer, GTextOverflowModeWordWrap);
-  text_layer_set_text(s_weather_layer, "Emergency Call\n000");
-  text_layer_set_font(s_weather_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
+  text_layer_set_background_color(contact_layer, GColorClear);
+  text_layer_set_text_color(contact_layer, GColorWhite);
+  text_layer_set_text_alignment(contact_layer, GTextAlignmentCenter);
+  text_layer_set_overflow_mode(contact_layer, GTextOverflowModeWordWrap);
+  text_layer_set_text(contact_layer, "Emergency Call\n000");
+  text_layer_set_font(contact_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
 
   // Create flood Layer
-layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_weather_layer));
+layer_add_child(window_get_root_layer(window), text_layer_get_layer(contact_layer));
 window_set_background_color(contact_window, GColorBlack);
 }
 
@@ -322,7 +315,7 @@ static void contact_window_unload(Window *window) {
   layer_remove_child_layers(window_get_root_layer(window));
 
   // Destroy weather elements
-  text_layer_destroy(s_weather_layer);
+  text_layer_destroy(contact_layer);
 }
 
 
@@ -335,7 +328,7 @@ static void init(void) {
   window_set_window_handlers(main_window,(WindowHandlers){
     .load = main_window_load,
     .unload = main_window_unload});
-  window_set_click_config_provider(main_window, click_config_provider);
+
 
   report_window = window_create();
   window_set_window_handlers(report_window, (WindowHandlers) {
@@ -349,19 +342,20 @@ static void init(void) {
   });
     window_stack_push(main_window, true);
 
-    /*app_message_register_inbox_received(inbox_received_callback);
+    app_message_register_inbox_received(inbox_received_callback);
     app_message_register_inbox_dropped(inbox_dropped_callback);
     app_message_register_outbox_failed(outbox_failed_callback);
     app_message_register_outbox_sent(outbox_sent_callback);
 
-      // Open AppMessage
-    app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
-*/
+    const int inbox_size = 256;
+    const int outbox_size = 256;
+    app_message_open(inbox_size, outbox_size);
+
 
 }
 
 static void deinit(void) {
-  window_destroy(contact_window);
+  //window_destroy(contact_window);
   window_destroy(report_window);
   window_destroy(main_window);
 

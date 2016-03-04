@@ -2,20 +2,26 @@
   "uuid": "a0ba102c-a42c-4f76-ad5f-9607f74fa890",
   "shortName": "FloodWatch",
   "longName": "FloodWatch",
-  "companyName": "MakeAwesomeHappen",
+  "companyName": "Peta Jakarta",
   "versionLabel": "1.0",
   "sdkVersion": "3",
-  "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "targetPlatforms": ["basalt", "chalk"],
   "watchapp": {
     "watchface": false
   },
   "appKeys": {
-    "KEY_NUMBER": 0,
     "KEY_AREA": 1,
-    "KEY_SOURCE":2,
-    "KEY_DESCRIPTION":3
+    "KEY_SOURCE":2
+
   },
   "resources": {
-    "media": []
+    "media": [
+      {
+                "file": "images/flood.png",
+                "name": "FLOOD",
+                "type": "png"
+
+      }
+    ]
   }
 }

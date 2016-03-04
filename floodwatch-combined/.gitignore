@@ -3,3 +3,6 @@ build
 
 # Ignore waf lock file
 .lock-waf*
+
+# Ignore Finder metadata
+.DS_Store
