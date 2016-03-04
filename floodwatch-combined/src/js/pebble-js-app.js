@@ -46,24 +46,23 @@ function locationSuccess(pos) {
       var json_length = Object.keys(json).length;
       console.log(json_length);
 
-      for (i=0; i< 1; i++){
+      for (i=0; i< 3; i++){
         // Flood Area
         area[i] = json.data[i].area_name ;
         console.log(area[i]);
-        area.toString();
         //Flood Media Source
         source[i]= json.data[i].source;
         console.log(source[i]);
-        source.toString();
-
-        // Assemble dictionary using our keys
-        var dictionary = {
-          "KEY_AREA": area,
-          "KEY_SOURCE":source
 
 
-        };
       }
+      // Assemble dictionary using our keys
+      var dictionary = {
+        "KEY_AREA": area.toString(),
+        "KEY_SOURCE": source.toString()
+
+
+      };
     }
 
     console.log("results are " + area +  ", " + source);

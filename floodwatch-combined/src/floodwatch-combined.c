@@ -18,7 +18,6 @@ typedef struct {
 } Floodinfo;
 
 static Floodinfo flood_info[] = {
-  {.area = "google"}
 };
 
 // Define the App elemments for the Main Window and Report window
@@ -71,7 +70,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
       while( area_temp != NULL )
       {
          flood_info[token_count].area= area_temp;
-       token_count++;
+         token_count++;
          area_temp = strtok(NULL, delim);
       }
 
