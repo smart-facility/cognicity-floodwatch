@@ -17,7 +17,7 @@ typedef struct {
   char *description;
 } Floodinfo;
 
-static Floodinfo flood_info[] = {
+static Floodinfo flood_info[256] = {
 };
 
 // Define the App elemments for the Main Window and Report window
