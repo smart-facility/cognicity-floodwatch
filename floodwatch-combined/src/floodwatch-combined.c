@@ -31,10 +31,6 @@ static TextLayer *contact_layer;
 //Create variable to store the index of the currenly selected menu item
 static int current_icon = 0;
 static int floodcount = 0;
-// Store incoming information
-static char area_buffer[32];
-static char source_buffer[32];
-static char weather_layer_buffer[32];
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   // Store incoming information
