@@ -8,7 +8,7 @@ var xhrRequest = function (url, type, callback) {
   xhr.send();
 };
 
-function locationSuccess(pos) {
+function FlooddataSuccess(pos) {
   // Construct URL
   var url = "https://petajakarta.org/banjir/data/api/v2/floodwatch/reports/?area=JAKARTA%20TIMUR";
 
@@ -17,8 +17,6 @@ function locationSuccess(pos) {
   function(responseText) {
     // responseText contains a JSON object with flood info
     var json = JSON.parse(responseText);
-    var json_length = Object.keys(json).length;
-    console.log(json_length);
 
     if (json.data == null){
       // If no floods prevaltent at update time
@@ -29,11 +27,14 @@ function locationSuccess(pos) {
       var source = "No Flood Reports Available";
       console.log("No Flood Reports Available");
       //Flood Description in indonesian
+      var description = "No Flood Reports Available";
+      console.log("No Flood Reports Available");
 
       var dictionary = {
 
         "KEY_AREA": area,
-        "KEY_SOURCE":source
+        "KEY_SOURCE":source,
+        "KEY_DESCRIPTION": description
 
 
       };
@@ -43,29 +44,33 @@ function locationSuccess(pos) {
 
       var source =[];
       var area = [];
-      var json_length = Object.keys(json).length;
+      var description = [];
+      var json_length = json.data.length;
       console.log(json_length);
 
-      for (i=0; i< 3; i++){
+      for (i=0; i< json_length; i++){
         // Flood Area
         area[i] = json.data[i].area_name ;
         console.log(area[i]);
         //Flood Media Source
         source[i]= json.data[i].source;
         console.log(source[i]);
+        description[i]= json.data[i].text + "|";
+        console.log(description[i]);
 
 
       }
       // Assemble dictionary using our keys
       var dictionary = {
         "KEY_AREA": area.toString(),
-        "KEY_SOURCE": source.toString()
+        "KEY_SOURCE": source.toString(),
+        "KEY_DESCRIPTION": description.toString()
 
 
       };
     }
 
-    console.log("results are " + area +  ", " + source);
+    console.log("results are " + area +  ", " + source + "," + description);
     // Send to Pebble
     Pebble.sendAppMessage(dictionary,
       function(e) {
@@ -80,14 +85,14 @@ function locationSuccess(pos) {
 );
 }
 
-function locationError(err) {
-  console.log("Error requesting location!");
+function FlooddataError(err) {
+  console.log("Error requesting Flooddata!");
 }
 
 function flood() {
   navigator.geolocation.getCurrentPosition(
-    locationSuccess,
-    locationError,
+    FlooddataSuccess,
+    FlooddataError,
     {timeout: 15000, maximumAge: 60000}
   );
 }

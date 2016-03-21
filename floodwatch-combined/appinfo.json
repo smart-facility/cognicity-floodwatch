@@ -11,17 +11,12 @@
   },
   "appKeys": {
     "KEY_AREA": 1,
-    "KEY_SOURCE":2
+    "KEY_SOURCE":2,
+    "KEY_DESCRIPTION":3
 
   },
   "resources": {
     "media": [
-      {
-                "file": "images/flood.png",
-                "name": "FLOOD",
-                "type": "png"
-
-      }
     ]
   }
 }
