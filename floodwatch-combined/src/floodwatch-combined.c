@@ -197,7 +197,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     snprintf(description_buffer, sizeof(description_buffer), "%s", description_tuple->value->cstring);
 
     // Assemble full string and display
-    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\nDetails:\n%s\n",area_buffer,source_buffer,description_buffer);
+    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",area_buffer,source_buffer,description_buffer);
 
     /* get the first token */
     area_temp = strtok(area_buffer, delim);
@@ -392,14 +392,14 @@ static void main_window_load(Window *window) {
     static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
       floodcount--;
       if (floodcount < min_token_count) floodcount = 0;
-      snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\nDetails:\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
+      snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
       text_layer_set_text(s_weather_layer, weather_layer_buffer);
     }
 
     static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
       floodcount++;
       if (floodcount > max_token_count) floodcount = max_token_count;
-      snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\nDetails:\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
+      snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
       text_layer_set_text(s_weather_layer, weather_layer_buffer);
     }
 
@@ -425,7 +425,7 @@ static void main_window_load(Window *window) {
         text_layer_set_text_color(s_weather_layer, GColorBlack);
         text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
         text_layer_set_overflow_mode(s_weather_layer, GTextOverflowModeWordWrap);
-        snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\nDetails:\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
+        snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
         text_layer_set_text(s_weather_layer, weather_layer_buffer);
         //text_layer_set_text(s_weather_layer, "Loading...");
         text_layer_set_font(s_weather_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
@@ -505,7 +505,7 @@ static void main_window_load(Window *window) {
           }
 
           static void deinit(void) {
-            //window_destroy(contact_window);
+            window_destroy(contact_window);
             window_destroy(report_window);
             window_destroy(main_window);
 

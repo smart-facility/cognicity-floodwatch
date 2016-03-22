@@ -93,7 +93,7 @@ function flood() {
   navigator.geolocation.getCurrentPosition(
     FlooddataSuccess,
     FlooddataError,
-    {timeout: 15000, maximumAge: 60000}
+    {timeout: 150, maximumAge: 600}
   );
 }
 
