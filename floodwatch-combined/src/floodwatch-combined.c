@@ -1,7 +1,7 @@
 #include <pebble.h>
 #include <string.h>
-#include "strtok.h"
-#include "strdup.h"
+#include "libs/strtok.h"
+#include "libs/strdup.h"
 
 
 #define Num_menu_sections 2

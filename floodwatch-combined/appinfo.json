@@ -1,22 +1,29 @@
 {
-  "uuid": "a0ba102c-a42c-4f76-ad5f-9607f74fa890",
-  "shortName": "FloodWatch",
-  "longName": "FloodWatch",
-  "companyName": "Peta Jakarta",
-  "versionLabel": "1.0",
-  "sdkVersion": "3",
-  "targetPlatforms": ["aplite", "basalt", "chalk"],
-  "watchapp": {
-    "watchface": false
-  },
-  "appKeys": {
-    "KEY_AREA": 1,
-    "KEY_SOURCE":2,
-    "KEY_DESCRIPTION":3
-
-  },
-  "resources": {
-    "media": [
-    ]
-  }
+    "appKeys": {
+        "KEY_AREA": 1,
+        "KEY_DESCRIPTION": 3,
+        "KEY_SOURCE": 2
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "Peta Jakarta",
+    "enableMultiJS": false,
+    "longName": "FloodWatch",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "FloodWatch",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "a0ba102c-a42c-4f76-ad5f-9607f74fa890",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
 }
