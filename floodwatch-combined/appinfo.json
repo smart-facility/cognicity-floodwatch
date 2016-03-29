@@ -7,9 +7,9 @@
     "capabilities": [
         ""
     ],
-    "companyName": "Peta Jakarta",
+    "companyName": "PetaJakarta.org",
     "enableMultiJS": false,
-    "longName": "FloodWatch",
+    "longName": "PetaJakarta.org FloodWatch",
     "projectType": "native",
     "resources": {
         "media": []
@@ -18,11 +18,10 @@
     "shortName": "FloodWatch",
     "targetPlatforms": [
         "aplite",
-        "basalt",
-        "chalk"
+        "basalt"
     ],
     "uuid": "a0ba102c-a42c-4f76-ad5f-9607f74fa890",
-    "versionLabel": "1.0",
+    "versionLabel": "0.2",
     "watchapp": {
         "watchface": false
     }
