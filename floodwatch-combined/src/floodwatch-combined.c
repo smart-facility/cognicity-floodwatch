@@ -3,7 +3,6 @@
 #include "libs/strtok.h"
 #include "libs/strdup.h"
 
-
 #define Num_menu_sections 2
 #define Num_menu_icons 3
 #define Num_first_menu_items 3
