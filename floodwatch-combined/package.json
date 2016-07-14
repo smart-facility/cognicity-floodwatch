@@ -1,0 +1,32 @@
+{
+    "author": "PetaJakarta.org",
+    "dependencies": {},
+    "keywords": [],
+    "name": "floodwatch",
+    "pebble": {
+        "capabilities": [
+            ""
+        ],
+        "displayName": "PetaJakarta.org FloodWatch",
+        "enableMultiJS": false,
+        "messageKeys": {
+            "KEY_AREA": 1,
+            "KEY_DESCRIPTION": 3,
+            "KEY_SOURCE": 2
+        },
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite",
+            "basalt"
+        ],
+        "uuid": "a0ba102c-a42c-4f76-ad5f-9607f74fa890",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "0.2.0"
+}
