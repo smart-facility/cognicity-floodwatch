@@ -15,6 +15,20 @@
 #define KEY_SOURCE 2
 #define KEY_DESCRIPTION 3
 
+// Define the App elemments for the Main Window and Report window
+static Window *main_window, *report_window, *contact_window;
+static TextLayer *title_layer, *region_layer;
+static MenuLayer *menu_layer;
+static TextLayer *s_weather_layer;
+static TextLayer *contact_layer;
+
+//Create variable to store the index of the currenly selected menu item
+static int current_icon = 0;
+
+//static void inbox_dropped_callback(AppMessageResult reason, void *context) {
+//  APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
+//}
+
 /*Initialize a structure to store the flood data values*/
 typedef struct {
   char *area;
@@ -24,18 +38,9 @@ typedef struct {
 
 static Floodinfo flood_info[256] = {};
 
-// Define the App elemments for the Main Window and Report window
-static Window *main_window, *report_window, *contact_window;
-static TextLayer *title_layer, *region_layer;
-static MenuLayer *menu_layer;
-static TextLayer *s_weather_layer;
-static TextLayer *contact_layer;
-
 // Create variable for weather layer
 static char weather_layer_buffer[700];
 
-//Create variable to store the index of the currenly selected menu item
-static int current_icon = 0;
 // Integer variable to store the number of reports
 static int floodcount = 0;
 
@@ -43,7 +48,7 @@ static int floodcount = 0;
 static int min_token_count = 0;
 static int max_token_count = 0;
 
-static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
+extern void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   // Store incoming information
   static char area_buffer[1024];
   static char source_buffer[1024];
@@ -113,7 +118,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   }
 }
 
-static void inbox_dropped_callback(AppMessageResult reason, void *context) {
+extern void inbox_dropped_callback(AppMessageResult reason, void *context) {
   APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
 }
 
