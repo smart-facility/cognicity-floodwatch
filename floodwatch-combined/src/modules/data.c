@@ -1,25 +1,9 @@
 #include <pebble.h>
 #include "modules/data.h"
 
-//Initialize a structure to store the flood data values
 /*
-typedef struct {
-  char *area;
-  char *source;
-  char *description;
-} Floodinfo;
 
-static Floodinfo flood_info[256] = {};
 
-// Create variable for weather layer
-static char weather_layer_buffer[700];
-
-// Integer variable to store the number of reports
-static int floodcount = 0;
-
-// Integer variables containing the maximum and minimum number of flood reports
-static int min_token_count = 0;
-static int max_token_count = 0;
 
 extern void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   // Store incoming information
@@ -53,10 +37,10 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     // Assemble full string and display
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",area_buffer,source_buffer,description_buffer);
 
-    // get the first token 
+    // get the first token
     area_temp = strtok(area_buffer, delim);
 
-    // walk through other tokens 
+    // walk through other tokens
     while( area_temp != NULL )
     {
       flood_info[token_count].area= strdup(area_temp);
@@ -68,7 +52,7 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
     source_temp = strtok(source_buffer, delim);
 
-    // walk through other tokens 
+    // walk through other tokens
     while( source_temp != NULL )
     {
       flood_info[token_count].source= strdup(source_temp);
@@ -79,7 +63,7 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     token_count = 0;
     description_temp = strtok(description_buffer, desc_delim);
 
-    // walk through other tokens 
+    // walk through other tokens
     while( description_temp != NULL )
     {
       flood_info[token_count].description= strdup(description_temp);
