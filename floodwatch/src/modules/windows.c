@@ -46,8 +46,12 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
         break;
     }
   }*/
+
+  snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
+  //text_layer_set_text(s_weather_layer, weather_layer_buffer);
+
   for (int i = 0; i < 5; i++){
-    menu_cell_basic_draw(ctx, cell_layer, "This is a dummy report...", "09:32 15/07/16", NULL);
+    menu_cell_basic_draw(ctx, cell_layer, weather_layer_buffer, "09:32 15/07/16", NULL);
   }
 }
 
@@ -190,9 +194,9 @@ static void main_window_load(Window *window) {
     GRect(0, 0,window_bounds.size.w, window_bounds.size.h));
     text_layer_set_text_alignment(title_layer, GTextAlignmentCenter);
     text_layer_set_text(title_layer, "FloodWatch");
-    text_layer_set_text_color(title_layer, GColorBlack);
+    text_layer_set_text_color(title_layer, GColorWhite);
     text_layer_set_background_color(title_layer, GColorClear);
-    text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
+    text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
     layer_add_child(window_layer, text_layer_get_layer(title_layer));
 
   region_layer = text_layer_create(
@@ -226,7 +230,7 @@ static void main_window_load(Window *window) {
 extern void init_windows(void) {
 
   main_window = window_create();
-  window_set_background_color(main_window, GColorCyan);
+  window_set_background_color(main_window, GColorPictonBlue);
 
   window_set_window_handlers(main_window,(WindowHandlers){
     .load = main_window_load,

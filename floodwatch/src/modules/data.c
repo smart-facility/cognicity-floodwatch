@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include <string.h>
 #include "libs/strdup.h"
+#include "libs/strtok.h"
 #include "modules/data.h"
 
 // Process incoming data
@@ -25,7 +26,6 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
   // If all data is available, use it
   if(area_tuple == NULL) {
-
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "No Floods at the moment");
   }
   else{
@@ -65,7 +65,7 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     /* walk through other tokens */
     while( description_temp != NULL )
     {
-      flood_info[token_count].description= strdup(description_temp);
+      flood_info[token_count].description = strdup(description_temp);
       token_count++;
       description_temp = strtok(NULL, desc_delim);
     }

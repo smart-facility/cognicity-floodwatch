@@ -8,9 +8,9 @@ var xhrRequest = function (url, type, callback) {
   xhr.send();
 };
 
-function FlooddataSuccess(pos) {
+function FlooddataSuccess() {
   // Construct URL
-  var url = "https://petajakarta.org/banjir/data/api/v2/floodwatch/reports/?area=JAKARTA%20TIMUR";
+  var url = "http://192.168.43.174:8081/banjir/data/api/v2/floodwatch/reports?area_name=JAKARTA%20SELATAN";
 
   // Send request to Flood API
   xhrRequest(url, 'GET',
@@ -65,9 +65,8 @@ function FlooddataSuccess(pos) {
         "KEY_AREA": area.toString(),
         "KEY_SOURCE": source.toString(),
         "KEY_DESCRIPTION": description.toString()
-
-
       };
+      console.log('dict: ',dictionary);
     }
 
     console.log("results are " + area +  ", " + source + "," + description);
@@ -90,11 +89,12 @@ function FlooddataError(err) {
 }
 
 function flood() {
-  navigator.geolocation.getCurrentPosition(
+  /*navigator.geolocation.getCurrentPosition(
     FlooddataSuccess,
     FlooddataError,
     {timeout: 150, maximumAge: 600}
-  );
+  );*/
+  FlooddataSuccess();
 }
 
 // Listen for when the watchapp is opened
