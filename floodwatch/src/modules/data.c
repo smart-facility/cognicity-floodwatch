@@ -6,6 +6,7 @@
 
 // Process incoming data
 extern void inbox_received_callback(DictionaryIterator *iterator, void *context) {
+
   // Store incoming information
   static char area_buffer[1024];
   static char source_buffer[1024];
@@ -35,7 +36,6 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
     // Assemble full string and display
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",area_buffer,source_buffer,description_buffer);
-
     /* get the first token */
     area_temp = strtok(area_buffer, delim);
 

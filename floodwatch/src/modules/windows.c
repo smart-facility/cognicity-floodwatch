@@ -47,10 +47,12 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
     }
   }*/
 
-  snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
   //text_layer_set_text(s_weather_layer, weather_layer_buffer);
 
-  for (int i = 0; i < 5; i++){
+  //APP_LOG(APP_LOG_LEVEL_INFO, weather_layer_buffer);
+
+  if (flood_info[0].area != NULL) {
+    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[0].area,flood_info[0].source,flood_info[0].description);
     menu_cell_basic_draw(ctx, cell_layer, weather_layer_buffer, "09:32 15/07/16", NULL);
   }
 }

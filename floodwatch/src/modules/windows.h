@@ -17,7 +17,7 @@ static TextLayer *contact_layer;
 static int current_icon = 0;
 
 // Constants for data transfer
-static int INBOX_SIZE = 256; //originally defined as const
+static int INBOX_SIZE = 5000; //originally defined as const, needs fixing.
 static int OUTBOX_SIZE = 256; //originally defined as const
 
 // Callback for number of menu sections

@@ -46,30 +46,25 @@ function FlooddataSuccess() {
       var area = [];
       var description = [];
       var json_length = json.data.length;
-      console.log(json_length);
 
       for (i=0; i< json_length; i++){
         // Flood Area
         area[i] = json.data[i].area_name ;
-        console.log(area[i]);
         //Flood Media Source
         source[i]= json.data[i].source;
-        console.log(source[i]);
         description[i]= json.data[i].text + "|";
-        console.log(description[i]);
 
 
       }
       // Assemble dictionary using our keys
       var dictionary = {
-        "KEY_AREA": area.toString(),
+        "KEY_AREA": source.toString(),
         "KEY_SOURCE": source.toString(),
-        "KEY_DESCRIPTION": description.toString()
+        "KEY_DESCRIPTION": source.toString()
       };
-      console.log('dict: ',dictionary);
     }
 
-    console.log("results are " + area +  ", " + source + "," + description);
+    //console.log("results are " + area +  ", " + source + "," + description);
     // Send to Pebble
     Pebble.sendAppMessage(dictionary,
       function(e) {
@@ -77,7 +72,7 @@ function FlooddataSuccess() {
 
       },
       function(e) {
-        console.log("Error sending Flood info to Pebble! No Flood Data Available");
+        console.log("Error sending Flood info to Pebble!");
       }
     );
   }
