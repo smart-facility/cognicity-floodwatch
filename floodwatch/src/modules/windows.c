@@ -5,19 +5,15 @@
 
 // Callback for number of menu sections
 extern uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data){
-  return Num_menu_sections;
+  //return Num_menu_sections;
+  const uint16_t num_sections = 1;
+  return num_sections;
 }
 
 // Callback for number of menu rows
 extern uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
-  switch (section_index){
-    case 0:
-    return Num_first_menu_items;
-    case 1:
-    return Num_second_menu_items;
-    default:
-    return 0;
-  }
+  const uint16_t num_rows = 5;
+  return num_rows;
 }
 
 // Callback for menu header height
@@ -27,19 +23,12 @@ static int16_t menu_get_header_height_callback(MenuLayer *menu_layer, uint16_t s
 
 // Draw header
 static void menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data){
-  switch (section_index){
-    case 0:
-      menu_cell_basic_header_draw(ctx, cell_layer, "#FloodWatch");
-      break;
-    case 1:
-      menu_cell_basic_header_draw(ctx, cell_layer, "Configure Area on Companion App");
-      break;
-  }
+      menu_cell_basic_header_draw(ctx, cell_layer, "Jakarta Utara");
 }
 
 // Draw row
 static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
-  switch (cell_index ->section){
+  /*switch (cell_index ->section){
     case 0 :
     // use row to specify hich item to draw
     switch (cell_index->row){
@@ -52,7 +41,13 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
       case 2:
         menu_cell_basic_draw(ctx, cell_layer, "Configure App", "Select", NULL);
         break;
+      case 3:
+        menu_cell_basic_draw(ctx, cell_layer, "Test App", "ABC", NULL);
+        break;
     }
+  }*/
+  for (int i = 0; i < 5; i++){
+    menu_cell_basic_draw(ctx, cell_layer, "This is a dummy report...", "09:32 15/07/16", NULL);
   }
 }
 
@@ -197,19 +192,19 @@ static void main_window_load(Window *window) {
     text_layer_set_text(title_layer, "FloodWatch");
     text_layer_set_text_color(title_layer, GColorBlack);
     text_layer_set_background_color(title_layer, GColorClear);
-    text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+    text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
     layer_add_child(window_layer, text_layer_get_layer(title_layer));
 
   region_layer = text_layer_create(
     GRect(0, 20,window_bounds.size.w, window_bounds.size.h));
     text_layer_set_text_alignment(region_layer, GTextAlignmentCenter);
-    text_layer_set_text(region_layer, "PetaJakarta.org");
+    //text_layer_set_text(region_layer, "PetaJakarta.org");
     text_layer_set_text_color(region_layer, GColorWhite);
     text_layer_set_background_color(region_layer, GColorClear);
     text_layer_set_font(region_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
     layer_add_child(window_layer, text_layer_get_layer(region_layer));
 
-  menu_layer = menu_layer_create(GRect(0, 50,window_bounds.size.w, window_bounds.size.h));
+  menu_layer = menu_layer_create(GRect(0, 30,window_bounds.size.w, window_bounds.size.h));
   //menu_layer_set_normal_colors(MenuLayer * menu_layer, GColorPictonBlue, GColorBlack);
   menu_layer_set_callbacks(menu_layer, NULL, (MenuLayerCallbacks){
     .get_num_sections = menu_get_num_sections_callback,
@@ -231,7 +226,7 @@ static void main_window_load(Window *window) {
 extern void init_windows(void) {
 
   main_window = window_create();
-  window_set_background_color(main_window, GColorGreen);
+  window_set_background_color(main_window, GColorCyan);
 
   window_set_window_handlers(main_window,(WindowHandlers){
     .load = main_window_load,
