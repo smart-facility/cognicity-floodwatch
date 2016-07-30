@@ -7,7 +7,8 @@
 #define Num_second_menu_items 1
 
 // Define the App elemments for the Main Window and Report window
-static Window *main_window, *report_window, *contact_window;
+static Window *main_window;
+static Window *report_window, *contact_window;
 static TextLayer *title_layer, *region_layer;
 static MenuLayer *menu_layer;
 static TextLayer *s_weather_layer;
@@ -70,6 +71,8 @@ static void main_window_unload(Window *window);
 
 // Main window
 static void main_window_load(Window *window);
+
+extern void menu_layer_load(Window *window);
 
 // Initialise windows
 extern void init_windows(void);

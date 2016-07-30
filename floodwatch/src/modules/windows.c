@@ -12,7 +12,7 @@ extern uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data
 
 // Callback for number of menu rows
 extern uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
-  const uint16_t num_rows = 5;
+  const uint16_t num_rows = 1;
   return num_rows;
 }
 
@@ -50,6 +50,9 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
   //text_layer_set_text(s_weather_layer, weather_layer_buffer);
 
   //APP_LOG(APP_LOG_LEVEL_INFO, weather_layer_buffer);
+
+  menu_cell_basic_draw(ctx, cell_layer, weather_layer_buffer, "09:32 15/07/16", NULL);
+
 
   if (flood_info[0].area != NULL) {
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[0].area,flood_info[0].source,flood_info[0].description);
@@ -210,6 +213,13 @@ static void main_window_load(Window *window) {
     text_layer_set_font(region_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
     layer_add_child(window_layer, text_layer_get_layer(region_layer));
 
+}
+
+extern void menu_layer_load (Window *window) {
+
+  Layer *window_layer = window_get_root_layer(window);
+  GRect window_bounds = layer_get_bounds(window_layer);
+
   menu_layer = menu_layer_create(GRect(0, 30,window_bounds.size.w, window_bounds.size.h));
   //menu_layer_set_normal_colors(MenuLayer * menu_layer, GColorPictonBlue, GColorBlack);
   menu_layer_set_callbacks(menu_layer, NULL, (MenuLayerCallbacks){
@@ -226,12 +236,14 @@ static void main_window_load(Window *window) {
   menu_layer_set_click_config_onto_window(menu_layer, window);
 
   layer_add_child(window_layer, menu_layer_get_layer(menu_layer));
+
 }
 
 // Initialise windows
 extern void init_windows(void) {
 
   main_window = window_create();
+  //menu_layer_load(main_window);
   window_set_background_color(main_window, GColorPictonBlue);
 
   window_set_window_handlers(main_window,(WindowHandlers){

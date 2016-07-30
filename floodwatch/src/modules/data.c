@@ -3,9 +3,14 @@
 #include "libs/strdup.h"
 #include "libs/strtok.h"
 #include "modules/data.h"
+#include "modules/windows.h"
+
+static Window *test_window;
 
 // Process incoming data
 extern void inbox_received_callback(DictionaryIterator *iterator, void *context) {
+
+
 
   // Store incoming information
   static char area_buffer[1024];
@@ -36,6 +41,9 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
     // Assemble full string and display
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",area_buffer,source_buffer,description_buffer);
+    APP_LOG(APP_LOG_LEVEL_INFO, description_buffer);
+    test_window = window_create();
+    window_stack_push(test_window, false);
     /* get the first token */
     area_temp = strtok(area_buffer, delim);
 
@@ -71,6 +79,8 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     }
 
     max_token_count = token_count-1;
+
+
   }
 }
 

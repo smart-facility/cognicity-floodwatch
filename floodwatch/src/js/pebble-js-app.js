@@ -9,8 +9,9 @@ var xhrRequest = function (url, type, callback) {
 };
 
 function FlooddataSuccess() {
+  console.log('FlooddataSuccess');
   // Construct URL
-  var url = "http://192.168.43.174:8081/banjir/data/api/v2/floodwatch/reports?area_name=JAKARTA%20SELATAN";
+  var url = "http://192.168.1.7:8081/banjir/data/api/v2/floodwatch/reports?area_name=JAKARTA%20SELATAN";
 
   // Send request to Flood API
   xhrRequest(url, 'GET',
@@ -64,7 +65,7 @@ function FlooddataSuccess() {
       };
     }
 
-    //console.log("results are " + area +  ", " + source + "," + description);
+    console.log("results are " + area +  ", " + source + "," + description);
     // Send to Pebble
     Pebble.sendAppMessage(dictionary,
       function(e) {
@@ -98,7 +99,9 @@ function(e) {
   console.log("PebbleKit JS ready!");
 
   // Get the initial flood details
-  flood();
+  //flood();
+  FlooddataSuccess();
+
 }
 );
 
