@@ -205,9 +205,9 @@ static void main_window_load(Window *window) {
     layer_add_child(window_layer, text_layer_get_layer(title_layer));
 
   region_layer = text_layer_create(
-    GRect(0, 20,window_bounds.size.w, window_bounds.size.h));
+    GRect(0, (window_bounds.size.h/2)-15,window_bounds.size.w, window_bounds.size.h));
     text_layer_set_text_alignment(region_layer, GTextAlignmentCenter);
-    //text_layer_set_text(region_layer, "PetaJakarta.org");
+    text_layer_set_text(region_layer, "loading...");
     text_layer_set_text_color(region_layer, GColorWhite);
     text_layer_set_background_color(region_layer, GColorClear);
     text_layer_set_font(region_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
