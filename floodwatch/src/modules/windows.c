@@ -70,7 +70,6 @@ static void select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, vo
       break;
     case 1:
       vibes_short_pulse();
-      window_stack_push(contact_window, true);
       break;
     case 2:
       vibes_short_pulse();
@@ -153,39 +152,10 @@ static void report_window_unload(Window *window) {
   text_layer_destroy(s_weather_layer);
 }
 
-// Load contact window
-static void contact_window_load(Window *window) {
-  // Get information about the Window
-  Layer *window_layer = window_get_root_layer(window);
-  GRect bounds = layer_get_bounds(window_layer);
-
-  contact_layer = text_layer_create(
-    GRect(0, 20, bounds.size.w, bounds.size.h));
-
-    // Style the text
-    text_layer_set_background_color(contact_layer, GColorClear);
-    text_layer_set_text_color(contact_layer, GColorWhite);
-    text_layer_set_text_alignment(contact_layer, GTextAlignmentCenter);
-    text_layer_set_overflow_mode(contact_layer, GTextOverflowModeWordWrap);
-    text_layer_set_text(contact_layer, "Emergency Call\n000");
-    text_layer_set_font(contact_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
-
-    // Create flood Layer
-    layer_add_child(window_get_root_layer(window), text_layer_get_layer(contact_layer));
-    window_set_background_color(contact_window, GColorBlack);
-}
-
-static void contact_window_unload(Window *window) {
-  layer_remove_child_layers(window_get_root_layer(window));
-
-  // Destroy weather elements
-  text_layer_destroy(contact_layer);
-}
-
 // Unload main window
 static void main_window_unload(Window *window) {
   text_layer_destroy(title_layer);
-  text_layer_destroy(region_layer);
+  text_layer_destroy(subtitle_layer);
   menu_layer_destroy(menu_layer);
 }
 
@@ -204,18 +174,17 @@ static void main_window_load(Window *window) {
     text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
     layer_add_child(window_layer, text_layer_get_layer(title_layer));
 
-  region_layer = text_layer_create(
+  subtitle_layer = text_layer_create(
     GRect(0, (window_bounds.size.h/2)-15,window_bounds.size.w, window_bounds.size.h));
-    text_layer_set_text_alignment(region_layer, GTextAlignmentCenter);
-    text_layer_set_text(region_layer, "loading...");
-    text_layer_set_text_color(region_layer, GColorWhite);
-    text_layer_set_background_color(region_layer, GColorClear);
-    text_layer_set_font(region_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
-    layer_add_child(window_layer, text_layer_get_layer(region_layer));
-
+    text_layer_set_text_alignment(subtitle_layer, GTextAlignmentCenter);
+    text_layer_set_text(subtitle_layer, "loading...");
+    text_layer_set_text_color(subtitle_layer, GColorWhite);
+    text_layer_set_background_color(subtitle_layer, GColorClear);
+    text_layer_set_font(subtitle_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+    layer_add_child(window_layer, text_layer_get_layer(subtitle_layer));
 }
 
-extern void menu_layer_load (Window *window) {
+static void menu_window_load (Window *window) {
 
   Layer *window_layer = window_get_root_layer(window);
   GRect window_bounds = layer_get_bounds(window_layer);
@@ -239,6 +208,11 @@ extern void menu_layer_load (Window *window) {
 
 }
 
+// Unload main window
+static void menu_window_unload(Window *window) {
+  menu_layer_destroy(menu_layer);
+}
+
 // Initialise windows
 extern void init_windows(void) {
 
@@ -251,19 +225,20 @@ extern void init_windows(void) {
     .unload = main_window_unload
   });
 
+  menu_window = window_create();
+  window_set_window_handlers(menu_window, (WindowHandlers){
+    .load = menu_window_load,
+    .unload = menu_window_unload
+  });
+
   report_window = window_create();
   window_set_window_handlers(report_window, (WindowHandlers) {
     .load = report_window_load,
     .unload = report_window_unload
-    });
-
-  contact_window = window_create();
-  window_set_window_handlers(contact_window, (WindowHandlers) {
-    .load = contact_window_load,
-    .unload = contact_window_unload
   });
 
   window_stack_push(main_window, true);
+  window_stack_push(menu_window, true);
 
   app_message_register_inbox_received(inbox_received_callback);
   app_message_register_inbox_dropped(inbox_dropped_callback);
@@ -275,7 +250,7 @@ extern void init_windows(void) {
 
 // Deinitialise windows
 extern void deinit_windows(void) {
-  window_destroy(contact_window);
+  window_destroy(menu_window);
   window_destroy(report_window);
   window_destroy(main_window);
 }
