@@ -4,13 +4,10 @@
 #include "libs/strtok.h"
 #include "modules/data.h"
 #include "modules/windows.h"
-
-static Window *test_window;
+#include "modules/shared.h"
 
 // Process incoming data
 extern void inbox_received_callback(DictionaryIterator *iterator, void *context) {
-
-
 
   // Store incoming information
   static char area_buffer[1024];
@@ -41,19 +38,22 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
     // Assemble full string and display
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",area_buffer,source_buffer,description_buffer);
-    APP_LOG(APP_LOG_LEVEL_INFO, description_buffer);
-    //test_window = window_create();
-    //window_stack_push(test_window, false);
+    APP_LOG(APP_LOG_LEVEL_INFO, area_buffer);
+
     /* get the first token */
     area_temp = strtok(area_buffer, delim);
+
+    //static char log_buffer[1024];
+    //snprintf(log_buffer, sizeof(log_buffer), "%s", "here\n");
 
     /* walk through other tokens */
     while( area_temp != NULL )
     {
-      flood_info[token_count].area= strdup(area_temp);
+      flood_info[token_count].area = strdup(area_temp);
       token_count++;
       area_temp = strtok(NULL, delim);
     }
+
     //reset token count back to 0
     token_count = 0;
 
@@ -80,9 +80,17 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
     max_token_count = token_count-1;
 
+    int foo = 1;
+    //*(foo_ptr) = 1;
+    static char log_buffer[10];
+    snprintf(log_buffer, sizeof(log_buffer), "%i", foo);
+    APP_LOG(APP_LOG_LEVEL_INFO, log_buffer);
 
+    //wrapper(*(flood_info));
   }
 }
+
+
 
 // Logging for incoming data handling
 extern void inbox_dropped_callback(AppMessageResult reason, void *context) {

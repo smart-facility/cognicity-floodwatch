@@ -51,21 +51,22 @@ function FlooddataSuccess() {
       for (i=0; i< json_length; i++){
         // Flood Area
         area[i] = json.data[i].area_name ;
-        //Flood Media Source
+        // Flood Media Source
         source[i]= json.data[i].source;
+        // Flood Description
         description[i]= json.data[i].text + "|";
 
 
       }
       // Assemble dictionary using our keys
       var dictionary = {
-        "KEY_AREA": source.toString(),
+        "KEY_AREA": area.toString(),
         "KEY_SOURCE": source.toString(),
-        "KEY_DESCRIPTION": source.toString()
+        "KEY_DESCRIPTION": description.toString()
       };
     }
 
-    console.log("results are " + area +  ", " + source + "," + description);
+    //console.log("results are " + area +  ", " + source + "," + description);
     // Send to Pebble
     Pebble.sendAppMessage(dictionary,
       function(e) {

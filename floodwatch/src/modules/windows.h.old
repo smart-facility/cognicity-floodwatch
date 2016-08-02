@@ -7,7 +7,8 @@
 #define Num_second_menu_items 1
 
 // Define the App elemments for the Main Window and Report window
-static Window *main_window, *report_window, *menu_window;
+static Window *main_window, *report_window;
+static Window *menu_window;
 static TextLayer *title_layer, *subtitle_layer;
 static MenuLayer *menu_layer;
 static TextLayer *s_weather_layer;
@@ -65,7 +66,10 @@ static void main_window_unload(Window *window);
 // Main window
 static void main_window_load(Window *window);
 
-static void menu_window_load(Window *window);
+extern void menu_window_load(Window *window);
+static void menu_window_unload(Window *window);
+
+extern void wrapper(struct Floodinfo *flood_info);
 
 // Initialise windows
 extern void init_windows(void);
