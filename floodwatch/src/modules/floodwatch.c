@@ -6,8 +6,8 @@
 
 // Initialize a structure to store the flood data values
 typedef struct {
-  char *area;
-  char *source;
+  char *distance;
+  char *time;
   char *description;
 } Floodinfo;
 
@@ -29,9 +29,9 @@ static int min_token_count = 0;
 static int max_token_count = 0;
 
 // Define Key Values for dictionary to obtain variables from the javascript code
-#define KEY_AREA 1
-#define KEY_SOURCE 2
-#define KEY_DESCRIPTION 3
+#define KEY_TIME 3
+#define KEY_DISTANCE 4
+#define KEY_DESCRIPTION 2
 
 // Create variable to store the index of the currenly selected menu item
 static int current_report = 0;
@@ -62,7 +62,7 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   floodcount--;
   if (floodcount < min_token_count) floodcount = 0;
-  snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
+  //snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
   //text_layer_set_text(s_weather_layer, weather_layer_buffer);
 }
 
@@ -70,7 +70,7 @@ static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   floodcount++;
   if (floodcount > max_token_count) floodcount = max_token_count;
-  snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
+  //snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
   //text_layer_set_text(s_weather_layer, weather_layer_buffer);
 }
 
@@ -107,17 +107,12 @@ static void menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, ui
 // Draw row
 static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
 
-  static char log_buffer[10];
+  static char dist_buffer[10];
   static char desc_buffer[100];
-  snprintf(log_buffer, sizeof(log_buffer), "%s", flood_info[cell_index[0].row].source);
+  snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[cell_index[0].row].distance);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[cell_index[0].row].description);
-  APP_LOG(APP_LOG_LEVEL_INFO, log_buffer);
 
-  //int i;
-  //for (i = 0; i < 3; i++){
-  //static char log_buffer2[10];
-  //snprintf(log_buffer2, sizeof(log_buffer), "%s", flood_info[cell_index].source);
-  menu_cell_basic_draw(ctx, cell_layer, log_buffer, desc_buffer, NULL);
+  menu_cell_basic_draw(ctx, cell_layer, dist_buffer, desc_buffer, NULL);
   //}
 };
 
@@ -125,12 +120,14 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
 static void report_window_load(Window *window) {
   window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
-  static char log_buffer[10];
+  static char dist_buffer[10];
+  static char time_buffer[10];
   static char desc_buffer[100];
   static char buffer[110];
-  snprintf(log_buffer, sizeof(log_buffer), "%s", flood_info[current_report].source);
+  snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[current_report].distance);
+  snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[current_report].description);
-  snprintf(buffer, sizeof(buffer), "%s\n%s", log_buffer, desc_buffer);
+  snprintf(buffer, sizeof(buffer), "%s\n%s\n%s", dist_buffer, time_buffer, desc_buffer);
 
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
@@ -200,60 +197,57 @@ static void listing_window_unload(Window *window) {
 extern void inbox_received_callback(DictionaryIterator *iterator, void *context) {
 
   // Store incoming information
-  static char area_buffer[1024];
-  static char source_buffer[1024];
+  static char time_buffer[1024];
+  static char distance_buffer[1024];
   static char description_buffer[1024];
 
-  char *area_temp;
-  char *source_temp;
+  char *time_temp;
+  char *distance_temp;
   char *description_temp;
   const char delim[] = ","; /*Delimiter to seperate area and source string into seperate values*/
   const char desc_delim[] = "|"; /*Delimiter to seperate description string into seperate values*/
   int token_count = 0;
 
   // Read tuples for data
-  Tuple *area_tuple = dict_find(iterator, KEY_AREA);
-  Tuple *source_tuple = dict_find(iterator, KEY_SOURCE);
+  Tuple *time_tuple = dict_find(iterator, KEY_TIME);
+  Tuple *distance_tuple = dict_find(iterator, KEY_DISTANCE);
   Tuple *description_tuple = dict_find(iterator, KEY_DESCRIPTION);
 
   // If all data is available, use it
-  if(area_tuple == NULL) {
+  if(description_tuple == NULL) {
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "No Floods at the moment");
   }
   else{
-    snprintf(area_buffer, sizeof(area_buffer), "%s", area_tuple->value->cstring);
-    snprintf(source_buffer, sizeof(source_buffer), "%s", source_tuple->value->cstring);
+    snprintf(time_buffer, sizeof(time_buffer), "%s", time_tuple->value->cstring);
+    snprintf(distance_buffer, sizeof(distance_buffer), "%s", distance_tuple->value->cstring);
     snprintf(description_buffer, sizeof(description_buffer), "%s", description_tuple->value->cstring);
 
     // Assemble full string and display
-    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",area_buffer,source_buffer,description_buffer);
-    APP_LOG(APP_LOG_LEVEL_INFO, area_buffer);
+    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",time_buffer,distance_buffer,description_buffer);
+    APP_LOG(APP_LOG_LEVEL_INFO, time_buffer);
 
     /* get the first token */
-    area_temp = strtok(area_buffer, delim);
-
-    //static char log_buffer[1024];
-    //snprintf(log_buffer, sizeof(log_buffer), "%s", "here\n");
+    time_temp = strtok(time_buffer, delim);
 
     /* walk through other tokens */
-    while( area_temp != NULL )
+    while( time_temp != NULL )
     {
-      flood_info[token_count].area = strdup(area_temp);
+      flood_info[token_count].time = strdup(time_temp);
       token_count++;
-      area_temp = strtok(NULL, delim);
+      time_temp = strtok(NULL, delim);
     }
 
     //reset token count back to 0
     token_count = 0;
 
-    source_temp = strtok(source_buffer, delim);
+    distance_temp = strtok(distance_buffer, delim);
 
     /* walk through other tokens */
-    while( source_temp != NULL )
+    while( distance_temp != NULL )
     {
-      flood_info[token_count].source= strdup(source_temp);
+      flood_info[token_count].distance = strdup(distance_temp);
       token_count++;
-      source_temp = strtok(NULL, delim);
+      distance_temp = strtok(NULL, delim);
     }
 
     token_count = 0;
