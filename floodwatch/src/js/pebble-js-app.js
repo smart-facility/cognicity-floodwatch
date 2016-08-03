@@ -54,41 +54,64 @@ var turf_distance = function (from, to, units) {
     return radiansToDistance(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units);
 };
 
-var processReports = function(reports){
-  user_location = {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [106.7932, -6.2196]
-      }
+var getUserLocation = function(callback){
+
+  function success(pos){
+    user_location = {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Point",
+          "coordinates": [pos.coords.longitude, pos.coords.latitude]
+        }
+    }
+    callback(user_location);
+  }
+
+  function error(err){
+    callback(err);
+  }
+
+  var options = {
+    enableHighAccuracy: true,
+    maximumAge: 10000,
+    timeout: 10000
   };
 
-  var pkey = [0];
-  var text = ["No Flood Reports Available"];
-  var time = ["NA"];
-  var distance = ["NA"];
+  navigator.geolocation.getCurrentPosition(success, error, options);
+}
 
-  if (reports.features !== null) {
+var processReports = function(reports){
 
-    // Reset stores
-    var pkey = [];
-    var text = [];
-    var time = [];
-    var distance = [];
+  // Data stores
+  var pkey = [];
+  var text = ['No flooding reported nearby :D'];
+  var time = [];
+  var distance = [];
 
-    for (var i = 0; i < reports.features.length -1; i++){
-      var dist = turf_distance(user_location, reports.features[i], 'kilometers');
-      if (dist <= 5.0) {
-        dist = dist.toFixed(1);
-        pkey.push(reports.features[i].properties.pkey);
-        text.push(reports.features[i].properties.text);
-        time.push(reports.features[i].properties.created_at.substring(11,16));
-        distance.push(dist);
+  getUserLocation(function(user_location){
+    if (user_location.type == "Feature"){
+      console.log(JSON.stringify(user_location));
+      if (reports.features !== null) {
+        for (var i = 0; i < reports.features.length -1; i++){
+          var dist = turf_distance(user_location, reports.features[i], 'kilometers');
+          if (dist <= 5.0) {
+            dist = dist.toFixed(1);
+            pkey.push(reports.features[i].properties.pkey);
+            text.push(reports.features[i].properties.text);
+            time.push(reports.features[i].properties.created_at.substring(11,16));
+            distance.push(dist);
+          }
+        }
       }
     }
-    console.log(distance.length);
-  }
+    else {
+      console.log("("+user_location.code+") "+user_location.message);
+      text = ['Error locating user'];
+    }
+  });
+
+
   // Assemble dictionary using our keys
   var dictionary = {
     "KEY_PKEY": pkey.toString(),

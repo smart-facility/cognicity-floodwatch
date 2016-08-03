@@ -15,22 +15,13 @@ typedef struct {
 static Floodinfo flood_info[256] = {};
 
 static long data_length;
+static char description_buffer[1024];
 
 
 // UI Elements
-static Window *listing_window, *report_window;
+static Window *listing_window, *report_window, *message_window;
 static MenuLayer *menu_layer;
-static TextLayer *report_text_layer;
-
-// Create variable for weather layer
-static char weather_layer_buffer[700]; /*TODO still used?*/
-
-// Integer variable to store the number of reports
-static int floodcount = 0;
-
-// Integer variables containing the maximum and minimum number of flood reports
-static int min_token_count = 0;
-static int max_token_count = 0;
+static TextLayer *report_text_layer, *message_text_layer;
 
 // Define Key Values for dictionary to obtain variables from the javascript code
 #define KEY_PKEY 1
@@ -71,18 +62,10 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 
 // Up click handler
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  floodcount--;
-  if (floodcount < min_token_count) floodcount = 0;
-  //snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
-  //text_layer_set_text(s_weather_layer, weather_layer_buffer);
 }
 
 // Down click handler
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  floodcount++;
-  if (floodcount > max_token_count) floodcount = max_token_count;
-  //snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
-  //text_layer_set_text(s_weather_layer, weather_layer_buffer);
 }
 */
 
@@ -103,7 +86,7 @@ extern uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data
 
 // Callback for number of menu rows
 extern uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
-  
+
   return data_length;
 }
 
@@ -151,8 +134,8 @@ static void report_window_load(Window *window) {
     GRect(0, 0,window_bounds.size.w, window_bounds.size.h));
 
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentCenter);
-  text_layer_set_text_color(report_text_layer, GColorBlack);
-  text_layer_set_background_color(report_text_layer, GColorClear);
+  text_layer_set_text_color(report_text_layer, GColorWhite);
+  text_layer_set_background_color(report_text_layer, GColorBlack);
   text_layer_set_font(report_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentLeft);
   text_layer_set_text(report_text_layer, report_buffer);
@@ -166,6 +149,34 @@ static void report_window_unload(Window *window) {
   text_layer_destroy(report_text_layer);
 }
 
+// Load report window
+static void message_window_load(Window *window) {
+  // No click functionality at the moment
+  //window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
+
+  // Get information about the Window
+  Layer *window_layer = window_get_root_layer(window);
+  GRect window_bounds = layer_get_bounds(window_layer);
+
+  message_text_layer = text_layer_create(
+    GRect(0, 0,window_bounds.size.w, window_bounds.size.h));
+
+  text_layer_set_text_alignment(message_text_layer, GTextAlignmentCenter);
+  text_layer_set_text_color(message_text_layer, GColorWhite);
+  text_layer_set_background_color(message_text_layer, GColorBlack);
+  text_layer_set_font(message_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  text_layer_set_text_alignment(message_text_layer, GTextAlignmentCenter);
+  text_layer_set_text(message_text_layer, description_buffer);
+
+  layer_add_child(window_layer, text_layer_get_layer(message_text_layer));
+}
+
+// Unload report window
+static void message_window_unload(Window *window) {
+  layer_remove_child_layers(window_get_root_layer(window));
+  text_layer_destroy(message_text_layer);
+}
+
 // Select click
 static void select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *callback_context) {
   current_report = cell_index[0].row;
@@ -176,7 +187,6 @@ static void select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, vo
   });
   window_stack_push(report_window, true);
 }
-
 
 // Window listing flood reports
 static void listing_window_load (Window *window) {
@@ -214,50 +224,46 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
   Tuple *data_length_tuple = dict_find(iterator, KEY_DATA_LENGTH);
   snprintf(data_length_buffer, sizeof(data_length_buffer), "%s", data_length_tuple->value->cstring);
 
-  data_length = atoi(data_length_buffer);//strtol(data_length_buffer, &eptr, 10);
+  data_length = atoi(data_length_buffer);
 
-  // Store incoming information
-  static char pkey_buffer[1024]; // *TODO* Needs adjusting
-  static char time_buffer[1024];
-  static char distance_buffer[1024];
-  static char description_buffer[1024];
-
-  char *pkey_vals;
-  char *time_vals;
-  char *distance_vals;
-  char *description_vals;
-
-  const char delim[] = ","; /*Delimiter to seperate area and source string into seperate values*/
-  const char desc_delim[] = "|"; /*Delimiter to seperate description string into seperate values*/
-
-  int token_count = 0; // counter for array variables
-
-  // fill array pkey with zeros
-  static int i;
-  static char s[1];
-  strcpy(s,"0");
-  for (i = 0; i < 256; i++){
-    flood_info[i].pkey = s;
-  }
-
-  // Read tuples for data
-  Tuple *pkey_tuple = dict_find(iterator, KEY_PKEY);
-  Tuple *time_tuple = dict_find(iterator, KEY_TIME);
-  Tuple *distance_tuple = dict_find(iterator, KEY_DISTANCE);
   Tuple *description_tuple = dict_find(iterator, KEY_DESCRIPTION);
+  snprintf(description_buffer, sizeof(description_buffer), "%s", description_tuple->value->cstring);
 
-  // Check if no nearby reports
-  if(pkey_tuple == 0) {
-    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "No Floods at the moment");
+  if (data_length == 0) {
+
+    message_window = window_create();
+    window_set_window_handlers(message_window, (WindowHandlers){
+      .load = message_window_load,
+      .unload = message_window_unload
+    });
+    window_stack_remove(loading_window, false);
+    window_stack_push(message_window, true);
   }
-  else {
+
+  else if (data_length > 0) {
+    // Store incoming information
+    static char pkey_buffer[1024]; // *TODO* Needs adjusting
+    static char time_buffer[1024];
+    static char distance_buffer[1024];
+
+    char *pkey_vals;
+    char *time_vals;
+    char *distance_vals;
+    char *description_vals;
+
+    const char delim[] = ","; /*Delimiter to seperate area and source string into seperate values*/
+    const char desc_delim[] = "|"; /*Delimiter to seperate description string into seperate values*/
+
+    int token_count = 0; // counter for array variables
+
+    // Read tuples for data
+    Tuple *pkey_tuple = dict_find(iterator, KEY_PKEY);
+    Tuple *time_tuple = dict_find(iterator, KEY_TIME);
+    Tuple *distance_tuple = dict_find(iterator, KEY_DISTANCE);
+
     snprintf(pkey_buffer, sizeof(pkey_buffer), "%s", time_tuple->value->cstring);
     snprintf(time_buffer, sizeof(time_buffer), "%s", time_tuple->value->cstring);
     snprintf(distance_buffer, sizeof(distance_buffer), "%s", distance_tuple->value->cstring);
-    snprintf(description_buffer, sizeof(description_buffer), "%s", description_tuple->value->cstring);
-
-    // Assemble full string and display
-    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",time_buffer,distance_buffer,description_buffer);
 
     /* get the first token */
     time_vals = strtok(time_buffer, delim);
@@ -313,6 +319,7 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
         .load = listing_window_load,
         .unload = listing_window_unload
     });
+
     window_stack_remove(loading_window, false);
     window_stack_push(listing_window, true);
   }
