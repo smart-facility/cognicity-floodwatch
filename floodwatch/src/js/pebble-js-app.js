@@ -79,6 +79,7 @@ var getUserLocation = function(callback){
         "geometry": {
           "type": "Point",
           "coordinates": [pos.coords.longitude, pos.coords.latitude]
+          //"coordinates":[106.826355,-6.1763649] /*for testing - @MONAS*/
         }
     }
     callback(user_location);
@@ -113,10 +114,10 @@ var processReports = function(reports){
           var dist = turf_distance(user_location, reports.features[i], 'kilometers');
           if (dist <= 5.0) {
             dist = dist.toFixed(1);
-            pkey.push(reports.features[i].properties.pkey);
-            text.push(reports.features[i].properties.text);
-            time.push(reports.features[i].properties.created_at.substring(11,16));
-            distance.push(dist);
+            pkey[i] = reports.features[i].properties.pkey;
+            text[i] = reports.features[i].properties.text;
+            time[i] = reports.features[i].properties.created_at.substring(11,16);
+            distance[i] = dist;
           }
         }
       }
@@ -126,8 +127,6 @@ var processReports = function(reports){
       text = ['[Error] Could not detemine user location'];
     }
     // Assemble dictionary using our keys
-    console.log(pkey.length);
-    console.log(text);
     var dictionary = {
       "KEY_PKEY": pkey.toString(),
       "KEY_DISTANCE":distance.toString(),
