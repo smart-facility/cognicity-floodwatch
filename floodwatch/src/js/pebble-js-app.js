@@ -102,7 +102,7 @@ var processReports = function(reports){
 
   // Data stores
   var pkey = [];
-  var text = ['[Success] No flood reports nearby'];
+  var text = ['[Success] No nearby flood reports'];
   var time = [];
   var distance = [];
 
