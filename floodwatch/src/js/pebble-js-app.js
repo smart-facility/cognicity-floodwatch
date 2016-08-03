@@ -83,7 +83,6 @@ var processReports = function(reports){
       var dist = turf_distance(user_location, reports.features[i], 'kilometers');
       if (dist <= 5.0) {
         dist = dist.toFixed(1);
-        //console.log(reports.features[i].properties.created_at);
         pkey.push(reports.features[i].properties.pkey);
         text.push(reports.features[i].properties.text);
         time.push(reports.features[i].properties.created_at.substring(11,16));
@@ -98,12 +97,10 @@ var processReports = function(reports){
     "KEY_TIME": time.toString(),
     "KEY_DESCRIPTION": text.join("|")
   };
-  console.log(JSON.stringify(dictionary));
 
     Pebble.sendAppMessage(dictionary,
       function(e) {
         console.log("Flood info sent to Pebble successfully!");
-
       },
       function(e) {
         console.log("Error sending Flood info to Pebble!");
@@ -161,6 +158,5 @@ function(e) {
 Pebble.addEventListener('appmessage',
   function(e) {
     console.log("AppMessage received!");
-    //flood();
     }
 );

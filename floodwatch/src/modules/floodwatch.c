@@ -110,7 +110,7 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
 
   static char dist_buffer[15];
   static char desc_buffer[100];
-  snprintf(dist_buffer, sizeof(dist_buffer), "%s %s km", flood_info[cell_index[0].row].time, flood_info[cell_index[0].row].distance);
+  snprintf(dist_buffer, sizeof(dist_buffer), "%s (%s km)", flood_info[cell_index[0].row].time, flood_info[cell_index[0].row].distance);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[cell_index[0].row].description);
 
   menu_cell_basic_draw(ctx, cell_layer, dist_buffer, desc_buffer, NULL);
@@ -128,7 +128,7 @@ static void report_window_load(Window *window) {
   snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[current_report].distance);
   snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[current_report].description);
-  snprintf(buffer, sizeof(buffer), "%s km\n%s\n%s", dist_buffer, time_buffer, desc_buffer);
+  snprintf(buffer, sizeof(buffer), "%s (%s km)\n%s", time_buffer, dist_buffer, desc_buffer);
 
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
@@ -140,7 +140,7 @@ static void report_window_load(Window *window) {
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentCenter);
   text_layer_set_text_color(report_text_layer, GColorBlack);
   text_layer_set_background_color(report_text_layer, GColorClear);
-  text_layer_set_font(report_text_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+  text_layer_set_font(report_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentLeft);
   text_layer_set_text(report_text_layer, buffer);
 
