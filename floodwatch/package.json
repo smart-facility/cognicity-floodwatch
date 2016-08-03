@@ -7,12 +7,14 @@
         "capabilities": [
             ""
         ],
-        "displayName": "PetaJakarta.org FloodWatch",
+        "displayName": "FloodWatch",
         "enableMultiJS": false,
         "messageKeys": {
-            "KEY_AREA": 1,
-            "KEY_DESCRIPTION": 3,
-            "KEY_SOURCE": 2
+            "KEY_PKEY": 1,
+            "KEY_DISTANCE": 2,
+            "KEY_TIME": 3,
+            "KEY_DESCRIPTION": 4,
+            "KEY_DATA_LENGTH": 5
         },
         "projectType": "native",
         "resources": {
@@ -28,5 +30,5 @@
             "watchface": false
         }
     },
-    "version": "0.2.0"
+    "version": "0.3.0"
 }
