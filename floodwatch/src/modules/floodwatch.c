@@ -94,7 +94,14 @@ extern uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data
 
 // Callback for number of menu rows
 extern uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
-  const uint16_t num_rows = 4;
+
+  int i;
+  static uint16_t num_rows = 0;
+  for (i=0;i<256;i++){
+    if (flood_info[i].description != NULL){
+      num_rows += 1;
+    };
+  }
   return num_rows;
 }
 
@@ -112,7 +119,7 @@ static void menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, ui
 static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
 
   static char dist_buffer[15];
-  static char desc_buffer[100];
+  static char desc_buffer[25];
   snprintf(dist_buffer, sizeof(dist_buffer), "%s (%s km)", flood_info[cell_index[0].row].time, flood_info[cell_index[0].row].distance);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[cell_index[0].row].description);
 
@@ -125,14 +132,14 @@ static void report_window_load(Window *window) {
   // No click functionality at the moment
   //window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
-  static char dist_buffer[10];
-  static char time_buffer[10];
-  static char desc_buffer[100];
-  static char buffer[110];
+  static char dist_buffer[4]; //< 5.0
+  static char time_buffer[6]; // hh:mm
+  static char desc_buffer[140]; //tweet
+  static char report_buffer[147]; // 140 + 5 +2
   snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[current_report].distance);
   snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[current_report].description);
-  snprintf(buffer, sizeof(buffer), "%s (%s km)\n%s", time_buffer, dist_buffer, desc_buffer);
+  snprintf(report_buffer, sizeof(report_buffer), "%s (%s km)\n%s", time_buffer, dist_buffer, desc_buffer);
 
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
@@ -146,7 +153,7 @@ static void report_window_load(Window *window) {
   text_layer_set_background_color(report_text_layer, GColorClear);
   text_layer_set_font(report_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentLeft);
-  text_layer_set_text(report_text_layer, buffer);
+  text_layer_set_text(report_text_layer, report_buffer);
 
   layer_add_child(window_layer, text_layer_get_layer(report_text_layer));
 }
@@ -229,7 +236,6 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
     // Assemble full string and display
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",time_buffer,distance_buffer,description_buffer);
-    APP_LOG(APP_LOG_LEVEL_INFO, time_buffer);
 
     /* get the first token */
     time_temp = strtok(time_buffer, delim);
