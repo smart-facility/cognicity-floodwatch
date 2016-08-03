@@ -1,10 +1,11 @@
 FloodWatch
 ==========
 ### Wearable flood alerts from PetaJakarta.org
-This repository contains the code for a Pebble SmartWatch Application, FloodWatch, which displays the current flood report status in the city of Jakarta as recorded by (PetaJakarta.org)[https://petajakarta.org]. The Pebble app was built using the Pebble SDK in C and contains Javascript code to pull flood reports from the PetaJakarta.org API.
+This repository contains the code for a Pebble SmartWatch Application, FloodWatch, which displays the current flood report status in the city of Jakarta as recorded by (https://petajakarta.org)[PetaJakarta.org]. The Pebble app was built using the Pebble SDK in C and contains Javascript code to pull flood reports from the PetaJakarta.org API.
 
 ### Target Platforms
-* Pebble Time Smartwatch ("Basalt")
+* Pebble Smartwatch ("Aplite" firmware)
+* Pebble Time Smartwatch ("Basalt" firmware)
 
 ### Build
 `pebble build`
@@ -14,7 +15,7 @@ This repository contains the code for a Pebble SmartWatch Application, FloodWatc
 
 ### Pebble SDK
 #### Cloud Pebble
-The most convinient method to run the flood watch application would be to use the Online Pebble Development application [**CloudPebble**](https://cloudpebble.net "CloudPebble").
+The most convenient method to run the flood watch application would be to use the Online Pebble Development application [**CloudPebble**](https://cloudpebble.net "CloudPebble").
 
 1. *CloudPebble* requires a pebble account to login and run the pebble application.
 2. Upon importing the repository from github compile the files using the Compilation tab and set the emulator to *Basalt* or *Chalk* since these two emulators represent the newer Pebble Time and Pebble Time Round watches which support colour display.
@@ -27,7 +28,7 @@ The Pebble SDK runs on the UNIX terminal. The SDK can be downloaded from https:/
 * Installation of the application can be done on either an emulator or on the PebbleWatch.
 * To install the application using the Pebble Emulator run `pebble install --emulator basalt` or `pebble install --emulator chalk` for the Basalt and Chalk emulators respectively.
 * To view the app logs on the terminal use `pebble build --emulator version --logs`.
-* To install the app directly onto the pebble watch use `pebble install --cloudpebble`. This installs the application through the cloudpebble conection established by the Pebble Time App on the Android or iOS device the pebble watch is connected to.
+* To install the app directly onto the pebble watch use `pebble install --cloudpebble`. This installs the application through the cloudpebble connection established by the Pebble Time App on the Android or iOS device the pebble watch is connected to.
 
 ## Contributors
 This project was funded by a University of Wollongong, Faculty of Engineering and Information Sciences summer scholarship awarded to Hasitha Jayanandana (hasithaj) and led by Tomas Holderness & Matthew Berryman at the Open Source Geospatial Lab (SMART Infrastructure Facility).
