@@ -140,7 +140,7 @@ static void report_window_load(Window *window) {
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentCenter);
   text_layer_set_text_color(report_text_layer, GColorBlack);
   text_layer_set_background_color(report_text_layer, GColorClear);
-  text_layer_set_font(report_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  text_layer_set_font(report_text_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentLeft);
   text_layer_set_text(report_text_layer, buffer);
 
