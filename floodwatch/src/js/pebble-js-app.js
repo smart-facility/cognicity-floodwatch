@@ -108,9 +108,9 @@ var processReports = function(reports){
 
   getUserLocation(function(user_location){
     if (user_location.type == "Feature"){
-      console.log(JSON.stringify(user_location));
       if (reports.features !== null) {
-        for (var i = 0; i < reports.features.length -1; i++){
+        var text = [];
+        for (var i = 0; i < reports.features.length; i++){
           var dist = turf_distance(user_location, reports.features[i], 'kilometers');
           if (dist <= 5.0) {
             dist = dist.toFixed(1);
@@ -126,17 +126,14 @@ var processReports = function(reports){
       console.log("("+user_location.code+") "+user_location.message);
       text = ['[Error] Could not detemine user location'];
     }
-  });
-
-
-  // Assemble dictionary using our keys
-  var dictionary = {
-    "KEY_PKEY": pkey.toString(),
-    "KEY_DISTANCE":distance.toString(),
-    "KEY_TIME": time.toString(),
-    "KEY_DESCRIPTION": text.join("|"),
-    "KEY_DATA_LENGTH": (pkey.length).toString()
-  };
+    // Assemble dictionary using our keys
+    var dictionary = {
+      "KEY_PKEY": pkey.toString(),
+      "KEY_DISTANCE":distance.toString(),
+      "KEY_TIME": time.toString(),
+      "KEY_DESCRIPTION": text.join("|"),
+      "KEY_DATA_LENGTH": (pkey.length).toString()
+    };
 
     Pebble.sendAppMessage(dictionary,
       function(e) {
@@ -146,6 +143,7 @@ var processReports = function(reports){
         console.log("Error sending Flood info to Pebble!");
       }
     );
+  });
 };
 
 // AJAX Requests
