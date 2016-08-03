@@ -161,7 +161,7 @@ var xhrRequest = function (url, type, callback) {
 // Get reports from PetaJakarta.org
 var getReports = function () {
   // Construct URL
-  var url = "http://192.168.1.7:8081/banjir/data/api/v2/reports/confirmed";
+  var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
 
   // Send request to Flood API
   xhrRequest(url, 'GET',
