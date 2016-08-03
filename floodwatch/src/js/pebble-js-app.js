@@ -109,7 +109,6 @@ var processReports = function(reports){
   getUserLocation(function(user_location){
     if (user_location.type == "Feature"){
       if (reports.features !== null) {
-        var text = [];
         for (var i = 0; i < reports.features.length; i++){
           var dist = turf_distance(user_location, reports.features[i], 'kilometers');
           if (dist <= 5.0) {
@@ -127,6 +126,8 @@ var processReports = function(reports){
       text = ['[Error] Could not detemine user location'];
     }
     // Assemble dictionary using our keys
+    console.log(pkey.length);
+    console.log(text);
     var dictionary = {
       "KEY_PKEY": pkey.toString(),
       "KEY_DISTANCE":distance.toString(),
