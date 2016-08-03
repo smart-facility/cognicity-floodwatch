@@ -54,7 +54,8 @@ static int16_t get_cell_height_callback(MenuLayer *menu_layer, MenuIndex *cell_i
 }
 #endif
 
-// Select click handler
+// Select click handler (disabled for now)
+/*
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   window_set_background_color(report_window, GColorRajah);
 }
@@ -74,13 +75,15 @@ static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   //snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:\n%s\nSource:%s\n%s\n",flood_info[floodcount].area,flood_info[floodcount].source,flood_info[floodcount].description);;
   //text_layer_set_text(s_weather_layer, weather_layer_buffer);
 }
+*/
 
-// Click configuration
+// Click configuration (currently disabled)
+/*
 static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
-}
+}*/
 
 // Callback for number of menu sections
 extern uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data){
@@ -119,7 +122,8 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
 
 // Load report window
 static void report_window_load(Window *window) {
-  window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
+  // No click functionality at the moment
+  //window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
   static char dist_buffer[10];
   static char time_buffer[10];

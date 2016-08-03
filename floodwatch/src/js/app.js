@@ -55,7 +55,6 @@ var turf_distance = function (from, to, units) {
 };
 
 var processReports = function(reports){
-  console.log('called');
 
   user_location = {
       "type": "Feature",

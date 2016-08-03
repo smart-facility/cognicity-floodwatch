@@ -21,7 +21,7 @@ static void loading_window_load(Window *window) {
     GRect(0, 0,window_bounds.size.w, window_bounds.size.h));
     text_layer_set_text_alignment(title_layer, GTextAlignmentCenter);
     text_layer_set_text(title_layer, "FloodWatch");
-    text_layer_set_text_color(title_layer, GColorWhite);
+    text_layer_set_text_color(title_layer, GColorBlack);
     text_layer_set_background_color(title_layer, GColorClear);
     text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
     layer_add_child(window_layer, text_layer_get_layer(title_layer));
@@ -30,7 +30,7 @@ static void loading_window_load(Window *window) {
     GRect(0, (window_bounds.size.h/2)-15,window_bounds.size.w, window_bounds.size.h));
     text_layer_set_text_alignment(subtitle_layer, GTextAlignmentCenter);
     text_layer_set_text(subtitle_layer, "loading...");
-    text_layer_set_text_color(subtitle_layer, GColorWhite);
+    text_layer_set_text_color(subtitle_layer, GColorBlack);
     text_layer_set_background_color(subtitle_layer, GColorClear);
     text_layer_set_font(subtitle_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
     layer_add_child(window_layer, text_layer_get_layer(subtitle_layer));
@@ -46,7 +46,6 @@ static void loading_window_unload(Window *window) {
 extern void init_windows(void) {
 
   loading_window = window_create();
-  window_set_background_color(loading_window, GColorPictonBlue);
 
   window_set_window_handlers(loading_window,(WindowHandlers){
     .load = loading_window_load,
