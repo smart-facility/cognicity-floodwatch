@@ -14,13 +14,16 @@ typedef struct {
 
 static Floodinfo flood_info[256] = {};
 
+static long data_length;
+
+
 // UI Elements
 static Window *listing_window, *report_window;
 static MenuLayer *menu_layer;
 static TextLayer *report_text_layer;
 
 // Create variable for weather layer
-static char weather_layer_buffer[700];
+static char weather_layer_buffer[700]; /*TODO still used?*/
 
 // Integer variable to store the number of reports
 static int floodcount = 0;
@@ -34,6 +37,9 @@ static int max_token_count = 0;
 #define KEY_DISTANCE 2
 #define KEY_TIME 3
 #define KEY_DESCRIPTION 4
+#define KEY_DATA_LENGTH 5
+
+static uint16_t key_data_length;
 
 // Create variable to store the index of the currenly selected menu item
 static int current_report = 0;
@@ -97,15 +103,8 @@ extern uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data
 
 // Callback for number of menu rows
 extern uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
-
-  int i;
-  static uint16_t num_rows = 0;
-  for (i=0;i<256;i++){
-    if (flood_info[i].description != NULL){
-      num_rows += 1;
-    };
-  }
-  return num_rows;
+  
+  return data_length;
 }
 
 // Callback for menu header height
@@ -211,28 +210,48 @@ static void listing_window_unload(Window *window) {
 // Process incoming data
 extern void inbox_received_callback(DictionaryIterator *iterator, void *context) {
 
+  static char data_length_buffer[3];
+  Tuple *data_length_tuple = dict_find(iterator, KEY_DATA_LENGTH);
+  snprintf(data_length_buffer, sizeof(data_length_buffer), "%s", data_length_tuple->value->cstring);
+
+  data_length = atoi(data_length_buffer);//strtol(data_length_buffer, &eptr, 10);
+
   // Store incoming information
+  static char pkey_buffer[1024]; // *TODO* Needs adjusting
   static char time_buffer[1024];
   static char distance_buffer[1024];
   static char description_buffer[1024];
 
-  char *time_temp;
-  char *distance_temp;
-  char *description_temp;
+  char *pkey_vals;
+  char *time_vals;
+  char *distance_vals;
+  char *description_vals;
+
   const char delim[] = ","; /*Delimiter to seperate area and source string into seperate values*/
   const char desc_delim[] = "|"; /*Delimiter to seperate description string into seperate values*/
-  int token_count = 0;
+
+  int token_count = 0; // counter for array variables
+
+  // fill array pkey with zeros
+  static int i;
+  static char s[1];
+  strcpy(s,"0");
+  for (i = 0; i < 256; i++){
+    flood_info[i].pkey = s;
+  }
 
   // Read tuples for data
+  Tuple *pkey_tuple = dict_find(iterator, KEY_PKEY);
   Tuple *time_tuple = dict_find(iterator, KEY_TIME);
   Tuple *distance_tuple = dict_find(iterator, KEY_DISTANCE);
   Tuple *description_tuple = dict_find(iterator, KEY_DESCRIPTION);
 
-  // If all data is available, use it
-  if(description_tuple == NULL) {
+  // Check if no nearby reports
+  if(pkey_tuple == 0) {
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "No Floods at the moment");
   }
-  else{
+  else {
+    snprintf(pkey_buffer, sizeof(pkey_buffer), "%s", time_tuple->value->cstring);
     snprintf(time_buffer, sizeof(time_buffer), "%s", time_tuple->value->cstring);
     snprintf(distance_buffer, sizeof(distance_buffer), "%s", distance_tuple->value->cstring);
     snprintf(description_buffer, sizeof(description_buffer), "%s", description_tuple->value->cstring);
@@ -241,38 +260,52 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "Where?:%s\nSource:%s\n%s\n",time_buffer,distance_buffer,description_buffer);
 
     /* get the first token */
-    time_temp = strtok(time_buffer, delim);
+    time_vals = strtok(time_buffer, delim);
 
     /* walk through other tokens */
-    while( time_temp != NULL )
+    while( time_vals != NULL )
     {
-      flood_info[token_count].time = strdup(time_temp);
+      flood_info[token_count].time = strdup(time_vals);
       token_count++;
-      time_temp = strtok(NULL, delim);
+      time_vals = strtok(NULL, delim);
     }
 
     //reset token count back to 0
     token_count = 0;
 
-    distance_temp = strtok(distance_buffer, delim);
+    /* get the first token */
+    pkey_vals = strtok(pkey_buffer, delim);
 
     /* walk through other tokens */
-    while( distance_temp != NULL )
+    while( pkey_vals != NULL )
     {
-      flood_info[token_count].distance = strdup(distance_temp);
+      flood_info[token_count].pkey = strdup(pkey_vals);
       token_count++;
-      distance_temp = strtok(NULL, delim);
+      pkey_vals = strtok(NULL, delim);
+    }
+
+    //reset token count back to 0
+    token_count = 0;
+
+    distance_vals = strtok(distance_buffer, delim);
+
+    /* walk through other tokens */
+    while( distance_vals != NULL )
+    {
+      flood_info[token_count].distance = strdup(distance_vals);
+      token_count++;
+      distance_vals = strtok(NULL, delim);
     }
 
     token_count = 0;
-    description_temp = strtok(description_buffer, desc_delim);
+    description_vals = strtok(description_buffer, desc_delim);
 
     /* walk through other tokens */
-    while( description_temp != NULL )
+    while( description_vals != NULL )
     {
-      flood_info[token_count].description = strdup(description_temp);
+      flood_info[token_count].description = strdup(description_vals);
       token_count++;
-      description_temp = strtok(NULL, desc_delim);
+      description_vals = strtok(NULL, desc_delim);
     }
 
     listing_window = window_create();

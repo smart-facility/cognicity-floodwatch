@@ -94,7 +94,8 @@ var processReports = function(reports){
     "KEY_PKEY": pkey.toString(),
     "KEY_DISTANCE":distance.toString(),
     "KEY_TIME": time.toString(),
-    "KEY_DESCRIPTION": text.join("|")
+    "KEY_DESCRIPTION": text.join("|"),
+    "KEY_DATA_LENGTH": (pkey.length).toString()
   };
 
     Pebble.sendAppMessage(dictionary,

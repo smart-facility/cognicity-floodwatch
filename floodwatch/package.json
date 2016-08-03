@@ -13,7 +13,8 @@
             "KEY_PKEY": 1,
             "KEY_DISTANCE": 2,
             "KEY_TIME": 3,
-            "KEY_DESCRIPTION": 4
+            "KEY_DESCRIPTION": 4,
+            "KEY_DATA_LENGTH": 5
         },
         "projectType": "native",
         "resources": {
