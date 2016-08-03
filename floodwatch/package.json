@@ -7,7 +7,7 @@
         "capabilities": [
             ""
         ],
-        "displayName": "PetaJakarta.org FloodWatch",
+        "displayName": "FloodWatch",
         "enableMultiJS": false,
         "messageKeys": {
             "KEY_PKEY": 1,
