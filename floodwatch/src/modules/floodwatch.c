@@ -6,6 +6,7 @@
 
 // Initialize a structure to store the flood data values
 typedef struct {
+  char *pkey;
   char *distance;
   char *time;
   char *description;
@@ -37,7 +38,8 @@ static int max_token_count = 0;
 // Create variable to store the index of the currenly selected menu item
 static int current_report = 0;
 
-// Pebble round support
+// Pebble round support - removed for now
+/*
 #ifdef PBL_ROUND
 static int16_t get_cell_height_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *callback_context) {
   if (menu_layer_is_index_selected(menu_layer, cell_index)) {
@@ -53,6 +55,7 @@ static int16_t get_cell_height_callback(MenuLayer *menu_layer, MenuIndex *cell_i
   }
 }
 #endif
+*/
 
 // Select click handler (disabled for now)
 /*
