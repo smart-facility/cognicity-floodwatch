@@ -3,7 +3,6 @@
 // Global reference for loading_window
 extern Window *loading_window;
 
-
 // Process incoming data
 extern void inbox_received_callback(DictionaryIterator *iterator, void *context);
 // Logging for incoming data errors

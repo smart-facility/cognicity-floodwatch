@@ -65,7 +65,6 @@ extern void deinit_windows(void) {
   window_destroy(loading_window);
 }
 
-
 // Main
 int main(void) {
   init_windows();   // Start

@@ -159,11 +159,11 @@ static void message_window_load(Window *window) {
   GRect window_bounds = layer_get_bounds(window_layer);
 
   message_text_layer = text_layer_create(
-    GRect(0, 0,window_bounds.size.w, window_bounds.size.h));
+    GRect(0, (window_bounds.size.h/2)-20, window_bounds.size.w, window_bounds.size.h));
 
   text_layer_set_text_alignment(message_text_layer, GTextAlignmentCenter);
-  text_layer_set_text_color(message_text_layer, GColorWhite);
-  text_layer_set_background_color(message_text_layer, GColorBlack);
+  text_layer_set_text_color(message_text_layer, GColorBlack);
+  text_layer_set_background_color(message_text_layer, GColorWhite);
   text_layer_set_font(message_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(message_text_layer, GTextAlignmentCenter);
   text_layer_set_text(message_text_layer, description_buffer);

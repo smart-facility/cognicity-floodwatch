@@ -1,4 +1,13 @@
-//floodwatch JS App
+//Floodwatch - Flood alerts from PetaJakarta.org
+//
+// pebble-js-app.js - JavaScript app for mobile
+
+/*-----------------------------------------------------------------------------/
+* TurfJS Functions (no require functionality available in Pebble)
+* http://turfjs.org/
+* MIT LICENSE https://github.com/Turfjs/turf/blob/master/LICENSE
+*-----------------------------------------------------------------------------*/
+// TurfJS getCoord
 var getCoord = function (obj) {
     if (Array.isArray(obj) &&
         typeof obj[0] === 'number' &&
@@ -18,6 +27,7 @@ var getCoord = function (obj) {
     throw new Error('A coordinate, feature, or point geometry is required');
 };
 
+// TurfJS Translation Factors
 var factors = {
     miles: 3960,
     nauticalmiles: 3441.145,
@@ -31,6 +41,7 @@ var factors = {
     kilometres: 6373
 };
 
+// TurfJS radiantsToDistance
 var radiansToDistance = function (radians, units) {
     var factor = factors[units || 'kilometers'];
     if (factor === undefined) {
@@ -39,6 +50,7 @@ var radiansToDistance = function (radians, units) {
     return radians * factor;
 };
 
+// TurfJS turf_distance
 var turf_distance = function (from, to, units) {
     var degrees2radians = Math.PI / 180;
     var coordinates1 = getCoord(from);
@@ -53,7 +65,11 @@ var turf_distance = function (from, to, units) {
 
     return radiansToDistance(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units);
 };
+/*
+* END TurfJS
+*/
 
+// Get user location
 var getUserLocation = function(callback){
 
   function success(pos){
@@ -81,11 +97,12 @@ var getUserLocation = function(callback){
   navigator.geolocation.getCurrentPosition(success, error, options);
 }
 
+// Process incoming flood data from PetaJakarta.org
 var processReports = function(reports){
 
   // Data stores
   var pkey = [];
-  var text = ['No flooding reported nearby :D'];
+  var text = ['[Success] No flood reports nearby'];
   var time = [];
   var distance = [];
 
@@ -107,7 +124,7 @@ var processReports = function(reports){
     }
     else {
       console.log("("+user_location.code+") "+user_location.message);
-      text = ['Error locating user'];
+      text = ['[Error] Could not detemine user location'];
     }
   });
 
@@ -131,6 +148,7 @@ var processReports = function(reports){
     );
 };
 
+// AJAX Requests
 var xhrRequest = function (url, type, callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function () {
@@ -140,6 +158,7 @@ var xhrRequest = function (url, type, callback) {
   xhr.send();
 };
 
+// Get reports from PetaJakarta.org
 var getReports = function () {
   // Construct URL
   var url = "http://192.168.1.7:8081/banjir/data/api/v2/reports/confirmed";
@@ -153,21 +172,6 @@ var getReports = function () {
       }
     );
 }
-
-/*
-function FlooddataError(err) {
-  console.log("Error requesting Flooddata!");
-}*/
-
-/*
-function flood() {
-  navigator.geolocation.getCurrentPosition(
-    FlooddataSuccess,
-    FlooddataError,
-    {timeout: 150, maximumAge: 600}
-  );
-  FlooddataSuccess();
-}*/
 
 // Listen for when the watchapp is opened
 Pebble.addEventListener('ready',
