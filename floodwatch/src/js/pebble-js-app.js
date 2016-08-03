@@ -55,7 +55,8 @@ var turf_distance = function (from, to, units) {
 };
 
 var processReports = function(reports){
-  console.log(JSON.stringify(reports));
+  console.log('called');
+
   user_location = {
       "type": "Feature",
       "properties": {},
@@ -65,21 +66,14 @@ var processReports = function(reports){
       }
   };
 
-  if (reports.features === null) {
-    var pkey = 0;
-    var text = "No Flood Reports Available";
-    var time = "NA";
-    var distance = "NA";
+  var pkey = [0];
+  var text = ["No Flood Reports Available"];
+  var time = ["NA"];
+  var distance = ["NA"];
 
-    // compile dict
-    var dictionary = {
-      "KEY_PKEY": pkey,
-      "KEY_DESCRIPTION": text,
-      "KEY_TIME": time,
-      "KEY_DISTANCE":distance
-    };
-  }
-  else {
+  if (reports.features !== null) {
+
+    // Reset stores
     var pkey = [];
     var text = [];
     var time = [];
@@ -88,26 +82,24 @@ var processReports = function(reports){
     for (var i = 0; i < reports.features.length -1; i++){
       var dist = turf_distance(user_location, reports.features[i], 'kilometers');
       if (dist <= 5.0) {
+        dist = dist.toFixed(1);
+        //console.log(reports.features[i].properties.created_at);
         pkey.push(reports.features[i].properties.pkey);
         text.push(reports.features[i].properties.text);
-        time.push(reports.features[i].properties.created_at);
-        distance.push(distance);
+        time.push(reports.features[i].properties.created_at.substring(11,16));
+        distance.push(dist);
       }
-      else {
-        pkey = 0;
-        text = "No Nearby Reports";
-        time = "NA";
-        distance = "NA";
-      }
-    };
-    // Assemble dictionary using our keys
-    var dictionary = {
-      "KEY_PKEY": pkey.toString(),
-      "KEY_DESCRIPTION": text.toString(),
-      "KEY_TIME": time.toString(),
-      "KEY_DISTANCE":distance.toString()
-      };
     }
+  }
+  // Assemble dictionary using our keys
+  var dictionary = {
+    "KEY_PKEY": pkey.toString(),
+    "KEY_DISTANCE":distance.toString(),
+    "KEY_TIME": time.toString(),
+    "KEY_DESCRIPTION": text.join("|")
+  };
+  console.log(JSON.stringify(dictionary));
+
     Pebble.sendAppMessage(dictionary,
       function(e) {
         console.log("Flood info sent to Pebble successfully!");

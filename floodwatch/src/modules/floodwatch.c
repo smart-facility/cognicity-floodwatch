@@ -29,9 +29,10 @@ static int min_token_count = 0;
 static int max_token_count = 0;
 
 // Define Key Values for dictionary to obtain variables from the javascript code
+#define KEY_PKEY 1
+#define KEY_DISTANCE 2
 #define KEY_TIME 3
-#define KEY_DISTANCE 4
-#define KEY_DESCRIPTION 2
+#define KEY_DESCRIPTION 4
 
 // Create variable to store the index of the currenly selected menu item
 static int current_report = 0;
@@ -107,9 +108,9 @@ static void menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, ui
 // Draw row
 static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
 
-  static char dist_buffer[10];
+  static char dist_buffer[15];
   static char desc_buffer[100];
-  snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[cell_index[0].row].distance);
+  snprintf(dist_buffer, sizeof(dist_buffer), "%s %s km", flood_info[cell_index[0].row].time, flood_info[cell_index[0].row].distance);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[cell_index[0].row].description);
 
   menu_cell_basic_draw(ctx, cell_layer, dist_buffer, desc_buffer, NULL);
@@ -127,7 +128,7 @@ static void report_window_load(Window *window) {
   snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[current_report].distance);
   snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[current_report].description);
-  snprintf(buffer, sizeof(buffer), "%s\n%s\n%s", dist_buffer, time_buffer, desc_buffer);
+  snprintf(buffer, sizeof(buffer), "%s km\n%s\n%s", dist_buffer, time_buffer, desc_buffer);
 
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
