@@ -107,8 +107,6 @@ var processReports = function(report_string, status){
   var time = [];
   var distance = [];
 
-  reports = JSON.parse(report_string);
-
   getUserLocation(function(user_location){
 
     if (status !== 200){
@@ -116,6 +114,7 @@ var processReports = function(report_string, status){
       text[0] = '[Error '+status+'] Problem communicating with server';
     }
     else {
+      reports = JSON.parse(report_string);
       // check for user location
       if (user_location.type == "Feature"){
         // check that there are some reports
@@ -146,8 +145,6 @@ var processReports = function(report_string, status){
       "KEY_DESCRIPTION": text.join("|"),
       "KEY_DATA_LENGTH": (pkey.length).toString()
     };
-
-    console.log(pkey.length);
 
     Pebble.sendAppMessage(dictionary,
       function(e) {
