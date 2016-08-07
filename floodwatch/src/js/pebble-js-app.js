@@ -99,7 +99,7 @@ var getUserLocation = function(callback){
 }
 
 // Process incoming flood data from PetaJakarta.org
-var processReports = function(reports){
+var processReports = function(report_string, status){
 
   // Data stores
   var pkey = [];
@@ -107,24 +107,36 @@ var processReports = function(reports){
   var time = [];
   var distance = [];
 
+  reports = JSON.parse(report_string);
+
   getUserLocation(function(user_location){
-    if (user_location.type == "Feature"){
-      if (reports.features !== null) {
-        for (var i = 0; i < reports.features.length; i++){
-          var dist = turf_distance(user_location, reports.features[i], 'kilometers');
-          if (dist <= 5.0) {
-            dist = dist.toFixed(1);
-            pkey[i] = reports.features[i].properties.pkey;
-            text[i] = reports.features[i].properties.text;
-            time[i] = reports.features[i].properties.created_at.substring(11,16);
-            distance[i] = dist;
+
+    if (status !== 200){
+      console.log('Error communicating with server ('+status+')');
+      text[0] = '[Error '+status+'] Problem communicating with server';
+    }
+    else {
+      // check for user location
+      if (user_location.type == "Feature"){
+        // check that there are some reports
+        if (reports.features !== null) {
+          // loop reports and check if nearby
+          for (var i = 0; i < reports.features.length; i++){
+            var dist = turf_distance(user_location, reports.features[i], 'kilometers');
+            if (dist <= 5.0) {
+              dist = dist.toFixed(1);
+              pkey[i] = reports.features[i].properties.pkey;
+              text[i] = reports.features[i].properties.text;
+              time[i] = reports.features[i].properties.created_at.substring(11,16);
+              distance[i] = dist;
+            }
           }
         }
       }
-    }
-    else {
-      console.log("("+user_location.code+") "+user_location.message);
-      text = ['[Error] Could not detemine user location'];
+      else {
+        console.log("("+user_location.code+") "+user_location.message);
+        text[0] = '[Error] Could not detemine user location';
+      }
     }
     // Assemble dictionary using our keys
     var dictionary = {
@@ -134,6 +146,8 @@ var processReports = function(reports){
       "KEY_DESCRIPTION": text.join("|"),
       "KEY_DATA_LENGTH": (pkey.length).toString()
     };
+
+    console.log(pkey.length);
 
     Pebble.sendAppMessage(dictionary,
       function(e) {
@@ -150,33 +164,20 @@ var processReports = function(reports){
 var xhrRequest = function (url, type, callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function () {
-    callback(this.responseText);
+    callback(this.responseText, this.status);
   };
   xhr.open(type, url);
   xhr.send();
 };
 
-// Get reports from PetaJakarta.org
-var getReports = function () {
-  // Construct URL
-  var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
-
-  // Send request to Flood API
-  xhrRequest(url, 'GET',
-    function(responseText) {
-      // responseText contains a JSON object with flood info
-      var json = JSON.parse(responseText);
-      processReports(json);
-      }
-    );
-}
-
 // Listen for when the watchapp is opened
 Pebble.addEventListener('ready',
-function(e) {
-  console.log("PebbleKit JS ready!");
-  getReports();
-  }
+  function(e) {
+    console.log("PebbleKit JS ready!");
+    // Request flood reports from API
+    var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
+    xhrRequest(url, 'GET', processReports);
+    }
 );
 
 // Listen for when an AppMessage is received
