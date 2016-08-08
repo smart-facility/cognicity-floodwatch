@@ -8,7 +8,7 @@
             ""
         ],
         "displayName": "FloodWatch",
-        "enableMultiJS": false,
+        "enableMultiJS": true,
         "messageKeys": {
             "KEY_PKEY": 1,
             "KEY_DISTANCE": 2,

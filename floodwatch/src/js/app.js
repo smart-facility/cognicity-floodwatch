@@ -1,73 +1,8 @@
 //Floodwatch - Flood alerts from PetaJakarta.org
 //
-// pebble-js-app.js - JavaScript app for mobile
+// app.js - JavaScript app for mobile
 
-/*-----------------------------------------------------------------------------/
-* TurfJS Functions (no require functionality available in Pebble)
-* http://turfjs.org/
-* MIT LICENSE https://github.com/Turfjs/turf/blob/master/LICENSE
-*-----------------------------------------------------------------------------*/
-// TurfJS getCoord
-var getCoord = function (obj) {
-    if (Array.isArray(obj) &&
-        typeof obj[0] === 'number' &&
-        typeof obj[1] === 'number') {
-        return obj;
-    } else if (obj) {
-        if (obj.type === 'Feature' &&
-            obj.geometry &&
-            obj.geometry.type === 'Point' &&
-            Array.isArray(obj.geometry.coordinates)) {
-            return obj.geometry.coordinates;
-        } else if (obj.type === 'Point' &&
-            Array.isArray(obj.coordinates)) {
-            return obj.coordinates;
-        }
-    }
-    throw new Error('A coordinate, feature, or point geometry is required');
-};
-
-// TurfJS Translation Factors
-var factors = {
-    miles: 3960,
-    nauticalmiles: 3441.145,
-    degrees: 57.2957795,
-    radians: 1,
-    inches: 250905600,
-    yards: 6969600,
-    meters: 6373000,
-    metres: 6373000,
-    kilometers: 6373,
-    kilometres: 6373
-};
-
-// TurfJS radiantsToDistance
-var radiansToDistance = function (radians, units) {
-    var factor = factors[units || 'kilometers'];
-    if (factor === undefined) {
-        throw new Error('Invalid unit');
-    }
-    return radians * factor;
-};
-
-// TurfJS turf_distance
-var turf_distance = function (from, to, units) {
-    var degrees2radians = Math.PI / 180;
-    var coordinates1 = getCoord(from);
-    var coordinates2 = getCoord(to);
-    var dLat = degrees2radians * (coordinates2[1] - coordinates1[1]);
-    var dLon = degrees2radians * (coordinates2[0] - coordinates1[0]);
-    var lat1 = degrees2radians * coordinates1[1];
-    var lat2 = degrees2radians * coordinates2[1];
-
-    var a = Math.pow(Math.sin(dLat / 2), 2) +
-          Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
-
-    return radiansToDistance(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units);
-};
-/*
-* END TurfJS
-*/
+var turf_distance = require('./libs/@turf/distance');
 
 // Get user location
 var getUserLocation = function(callback){
