@@ -1,7 +1,9 @@
 FloodWatch
 ==========
 ### Wearable flood alerts from PetaJakarta.org
-This repository contains the code for a Pebble SmartWatch Application, FloodWatch, which displays the current flood report status in the city of Jakarta as recorded by (https://petajakarta.org)[PetaJakarta.org]. The Pebble app was built using the Pebble SDK in C and contains Javascript code to pull flood reports from the PetaJakarta.org API.
+FloodWatch is a Pebble SmartWatch Application which shows flood reports recorded by (https://petajakarta.org)[PetaJakarta.org] within 5 km of the user's location.
+
+The Pebble app was built using the Pebble SDK in C and contains Javascript code to pull flood reports from the PetaJakarta.org API.
 
 ### Target Platforms
 * Pebble Smartwatch ("Aplite" firmware)
@@ -14,6 +16,8 @@ This repository contains the code for a Pebble SmartWatch Application, FloodWatc
 `pebble install --emulator basalt`
 
 ### Pebble SDK
+* Pebble Tool v4.3 (active SDK: 3.14)
+
 #### Cloud Pebble
 The most convenient method to run the flood watch application would be to use the Online Pebble Development application [**CloudPebble**](https://cloudpebble.net "CloudPebble").
 
