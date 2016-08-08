@@ -1,11 +1,12 @@
 {
     "author": "PetaJakarta.org",
-    "dependencies": {},
-    "keywords": [],
-    "name": "floodwatch",
+    "dependencies": {"@turf/distance": "3.3.3"},
+    "keywords": ["flood", "flooding", "jakarta", "PetaJakarta"],
+    "name": "FloodWatch",
+    "version": "0.4.0",
     "pebble": {
         "capabilities": [
-            ""
+            "location"
         ],
         "displayName": "FloodWatch",
         "enableMultiJS": true,
@@ -18,7 +19,7 @@
         },
         "projectType": "native",
         "resources": {
-            "media": []
+            "media": [] 
         },
         "sdkVersion": "3",
         "targetPlatforms": [
@@ -29,6 +30,5 @@
         "watchapp": {
             "watchface": false
         }
-    },
-    "version": "0.3.0"
+    }
 }
