@@ -261,7 +261,7 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     Tuple *time_tuple = dict_find(iterator, KEY_TIME);
     Tuple *distance_tuple = dict_find(iterator, KEY_DISTANCE);
 
-    snprintf(pkey_buffer, sizeof(pkey_buffer), "%s", time_tuple->value->cstring);
+    snprintf(pkey_buffer, sizeof(pkey_buffer), "%s", pkey_tuple->value->cstring);
     snprintf(time_buffer, sizeof(time_buffer), "%s", time_tuple->value->cstring);
     snprintf(distance_buffer, sizeof(distance_buffer), "%s", distance_tuple->value->cstring);
 
