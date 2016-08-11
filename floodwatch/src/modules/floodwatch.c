@@ -119,8 +119,8 @@ static void report_window_load(Window *window) {
 
   static char dist_buffer[4]; //< 5.0
   static char time_buffer[6]; // hh:mm
-  static char desc_buffer[140]; //tweet
-  static char report_buffer[147]; // 140 + 5 +2
+  static char desc_buffer[160];
+  static char report_buffer[160];
   snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[current_report].distance);
   snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[current_report].description);
@@ -264,6 +264,9 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     snprintf(pkey_buffer, sizeof(pkey_buffer), "%s", pkey_tuple->value->cstring);
     snprintf(time_buffer, sizeof(time_buffer), "%s", time_tuple->value->cstring);
     snprintf(distance_buffer, sizeof(distance_buffer), "%s", distance_tuple->value->cstring);
+
+    APP_LOG(APP_LOG_LEVEL_INFO, distance_buffer);
+
 
     /* get the first token */
     time_vals = strtok(time_buffer, delim);

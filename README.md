@@ -34,5 +34,27 @@ The Pebble SDK runs on the UNIX terminal. The SDK can be downloaded from https:/
 * To view the app logs on the terminal use `pebble build --emulator version --logs`.
 * To install the app directly onto the pebble watch use `pebble install --cloudpebble`. This installs the application through the cloudpebble connection established by the Pebble Time App on the Android or iOS device the pebble watch is connected to.
 
+#### A Note on Message Sizes
+Messages are limited to 10 most recent reports at any one time (within 5 km of user), more than this results in unreasonably long list on the watch. This also helps to reduce memory footprint of the app.
+
+Message descriptions are fixed to 160 characters, as this is a reasonable amount of text to read at font size 18 on the watch. Messages longer than this, such as those from the Pasangmata.com and Qlue data sources will be truncated.
+
+For calculation of `INBOX_SIZE` report fields are as follows
+
+| Field/Key   | Number of characters | Notes                         |
+| ----------- | -------------------- | ----------------------------- |
+| PKEY        | 20                   | PostgreSQL Bigint             |
+| DISTANCE    | 3                    | E.g. 3.1                      |
+| TIME        | 6                    | E.g. 23:16                    |
+| DESCRIPTION | 160                  | Fit watch screen              |
+| LENGTH      | 2                    | Length of PKEY array (max 10) |
+
+Thus, including delimiters a message containing a full compliment of 10 flood reports should contain a
+maximum of 227 characters.
+
+Using the [Pebble SDK formula](https://developer.pebble.com/docs/c/Foundation/Dictionary/#dict_calc_buffer_size) gives,
+`1+(5*7)+227`, so a total of 263 bytes are required for an incoming message.
+
+
 ## Contributors
 This project was funded by a University of Wollongong, Faculty of Engineering and Information Sciences summer scholarship awarded to Hasitha Jayanandana (hasithaj) and led by Tomas Holderness & Matthew Berryman at the Open Source Geospatial Lab (SMART Infrastructure Facility).

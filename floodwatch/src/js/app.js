@@ -60,8 +60,8 @@ var processReports = function(report_string, status){
             if (dist <= 5.0) {
               dist = dist.toFixed(1);
               pkey[i] = reports.features[i].properties.pkey;
-              text[i] = reports.features[i].properties.text;
-              time[i] = reports.features[i].properties.created_at.substring(11,16);
+              text[i] = reports.features[i].properties.text.slice(0,160);
+              time[i] = reports.features[i].properties.created_at.slice(11,16);
               distance[i] = dist;
             }
           }
