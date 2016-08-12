@@ -107,7 +107,7 @@ Pebble.addEventListener('ready',
   function(e) {
     console.log("PebbleKit JS ready!");
     // Request flood reports from API
-    var url = "http://localhost:8081/banjir/data/api/v2/reports/confirmed";
+    var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
     xhrRequest(url, 'GET', processReports);
     }
 );
