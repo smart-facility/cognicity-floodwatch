@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/smart-facility/cognicity-floodwatch.svg?branch=0.4)](https://travis-ci.org/smart-facility/cognicity-floodwatch)
+
 FloodWatch
 ==========
 ### Wearable flood alerts from PetaJakarta.org
