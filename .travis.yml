@@ -1,3 +1,8 @@
+# Travis CI Support
+# Courtesy of https://github.com/cat-haines/pebble-travis/blob/master/LICENSE
+# under an MIT license
+# includes scripts/cibuild & ciinstall
+
 sudo: false
 
 language: python
