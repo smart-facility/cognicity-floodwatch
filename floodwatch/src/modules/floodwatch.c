@@ -12,10 +12,10 @@ typedef struct {
   char *description;
 } Floodinfo;
 
-static Floodinfo flood_info[256] = {};
+static Floodinfo flood_info[10] = {};
 
 static long data_length;
-static char description_buffer[1024];
+static char description_buffer[1609];
 
 
 // UI Elements
@@ -117,7 +117,7 @@ static void report_window_load(Window *window) {
   // No click functionality at the moment
   //window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
-  static char dist_buffer[4]; //< 5.0
+  static char dist_buffer[5]; //< 5.0
   static char time_buffer[6]; // hh:mm
   static char desc_buffer[160];
   static char report_buffer[160];
@@ -242,9 +242,9 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
   else if (data_length > 0) {
     // Store incoming information
-    static char pkey_buffer[1024]; // *TODO* Needs adjusting
-    static char time_buffer[1024];
-    static char distance_buffer[1024];
+    static char pkey_buffer[209]; // *TODO* Needs adjusting
+    static char time_buffer[69];
+    static char distance_buffer[39];
 
     char *pkey_vals;
     char *time_vals;
