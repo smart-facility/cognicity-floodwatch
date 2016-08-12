@@ -2,6 +2,8 @@
 #include "modules/floodwatch.h"
 
 // CogniCity Floodwatch - Flood Alerts to Pebble Smart Watch from PetaJakarta.org
+// (c) Hasitha Jayanandana, Tomas Holderness & Matthew Berryman 2016
+// Released under GNU GPLv3 (see LICENSE.txt)
 
 // Define the App elemments for the Main Window and Report window
 Window *loading_window;
