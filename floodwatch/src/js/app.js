@@ -10,13 +10,13 @@ var turf_distance = require('./libs/@turf/distance');
 var getUserLocation = function(callback){
 
   function success(pos){
-    user_location = {
+    var user_location = {
         "type": "Feature",
         "properties": {},
         "geometry": {
           "type": "Point",
-          "coordinates": [pos.coords.longitude, pos.coords.latitude]
-          //"coordinates":[106.826355,-6.1763649] /*for testing - @MONAS*/
+          //"coordinates": [pos.coords.longitude, pos.coords.latitude]
+          "coordinates":[106.826355,-6.1763649] /*for testing - @MONAS*/
         }
     }
     callback(user_location);
@@ -51,7 +51,7 @@ var processReports = function(report_string, status){
       text[0] = '[Error '+status+'] Problem communicating with server';
     }
     else {
-      reports = JSON.parse(report_string);
+      var reports = JSON.parse(report_string);
       // check for user location
       if (user_location.type == "Feature"){
         // check that there are some reports
@@ -109,7 +109,8 @@ Pebble.addEventListener('ready',
   function(e) {
     console.log("PebbleKit JS ready!");
     // Request flood reports from API
-    var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
+    //var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
+    var url = "http://127.0.0.1:8080/sample_reports.json"
     xhrRequest(url, 'GET', processReports);
     }
 );

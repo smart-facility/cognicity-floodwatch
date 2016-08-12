@@ -20,6 +20,10 @@ The Pebble app was built using the Pebble SDK in C and contains Javascript code 
 ### Pebble SDK
 * Pebble Tool v4.3 (active SDK: 3.14)
 
+### Dependencies
+Pebble `merge_js` concatenates all JavaScript files, this stripped down versions of libraries must be created, and placed in `src/js/libs`.
+* [TurfJS](https://github.com/Turfjs/turf-distance) v3.3.x
+
 #### Cloud Pebble
 The most convenient method to run the flood watch application would be to use the Online Pebble Development application [**CloudPebble**](https://cloudpebble.net "CloudPebble").
 
