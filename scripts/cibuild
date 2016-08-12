@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -e # halt script on error
 
+cd ./floodwatch # move to project directory
+
 # Pipe 'yes' into pebble tool to accept terms and conditions
-yes | ./pebble-dev/pebble-sdk-$PEBBLE_TOOL-linux64/bin/pebble build
+yes | ../pebble-dev/pebble-sdk-$PEBBLE_TOOL-linux64/bin/pebble build
