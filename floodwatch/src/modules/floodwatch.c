@@ -30,8 +30,6 @@ static TextLayer *report_text_layer, *message_text_layer;
 #define KEY_DESCRIPTION 4
 #define KEY_DATA_LENGTH 5
 
-static uint16_t key_data_length;
-
 // Create variable to store the index of the currenly selected menu item
 static int current_report = 0;
 
