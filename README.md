@@ -52,9 +52,7 @@ For calculation of `INBOX_SIZE` report fields are as follows
 Thus, including delimiters a message containing a full compliment of 10 flood reports should contain a
 maximum of 227 characters.
 
-Using the [Pebble SDK formula](https://developer.pebble.com/docs/c/Foundation/Dictionary/#dict_calc_buffer_size) gives,
-`1+(5*7)+227`, so a total of 263 bytes are required for an incoming message.
-
+Using the [Pebble SDK formula](https://developer.pebble.com/docs/c/Foundation/Dictionary/#dict_calc_buffer_size) we estimate that a maximum of 2220 bytes are needed per message.
 
 ## Contributors
 This project was funded by a University of Wollongong, Faculty of Engineering and Information Sciences summer scholarship awarded to Hasitha Jayanandana (hasithaj) and led by Tomas Holderness & Matthew Berryman at the Open Source Geospatial Lab (SMART Infrastructure Facility).

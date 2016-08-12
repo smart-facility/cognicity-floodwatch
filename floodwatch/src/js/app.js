@@ -13,8 +13,8 @@ var getUserLocation = function(callback){
         "properties": {},
         "geometry": {
           "type": "Point",
-          "coordinates": [pos.coords.longitude, pos.coords.latitude]
-          //"coordinates":[106.826355,-6.1763649] /*for testing - @MONAS*/
+          //"coordinates": [pos.coords.longitude, pos.coords.latitude]
+          "coordinates":[106.826355,-6.1763649] /*for testing - @MONAS*/
         }
     }
     callback(user_location);
@@ -55,7 +55,7 @@ var processReports = function(report_string, status){
         // check that there are some reports
         if (reports.features !== null) {
           // loop reports and check if nearby
-          for (var i = 0; i < reports.features.length; i++){
+          for (var i = 0; i < 10; i++){
             var dist = turf_distance(user_location, reports.features[i], 'kilometers');
             if (dist <= 5.0) {
               dist = dist.toFixed(1);
@@ -107,7 +107,7 @@ Pebble.addEventListener('ready',
   function(e) {
     console.log("PebbleKit JS ready!");
     // Request flood reports from API
-    var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
+    var url = "http://localhost:8081/banjir/data/api/v2/reports/confirmed";
     xhrRequest(url, 'GET', processReports);
     }
 );

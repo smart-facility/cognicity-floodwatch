@@ -8,7 +8,7 @@ Window *loading_window;
 static TextLayer *title_layer, *subtitle_layer;
 
 // Constants for data transfer
-static int INBOX_SIZE = 5000; //originally defined as const, needs fixing.
+static int INBOX_SIZE = 2220; //originally defined as const, needs fixing.
 static int OUTBOX_SIZE = 1; //originally defined as const
 
 // loading_window_load
