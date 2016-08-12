@@ -242,7 +242,7 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     // Store incoming information
     static char pkey_buffer[209]; // *TODO* Needs adjusting
     static char time_buffer[69];
-    static char distance_buffer[39];
+    static char distance_buffer[40];
 
     char *pkey_vals;
     char *time_vals;
