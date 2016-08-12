@@ -23,4 +23,4 @@ script: ./scripts/cibuild
 
 env:
   global:
-- PEBBLE_TOOL=4.2
+    - PEBBLE_TOOL=4.2
