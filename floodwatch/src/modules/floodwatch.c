@@ -60,20 +60,29 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 
 // Up click handler
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-}
+}*/
 
 // Down click handler
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
+  if (current_report < data_length-1){
+    current_report += 1;
+    report_window = window_create();
+    window_set_window_handlers(report_window,(WindowHandlers){
+      .load = report_window_load,
+      .unload = report_window_unload
+    });
+    window_stack_remove(report_window, true);
+    window_stack_push(report_window, true);
+  }
 }
-*/
+
 
 // Click configuration (currently disabled)
-/*
 static void click_config_provider(void *context) {
-  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
-  window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+  //window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+  //window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
-}*/
+}
 
 // Callback for number of menu sections
 extern uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data){
@@ -112,8 +121,6 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
 
 // Load report window
 static void report_window_load(Window *window) {
-  // No click functionality at the moment
-  //window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
   static char dist_buffer[5]; //< 5.0
   static char time_buffer[6]; // hh:mm
@@ -123,6 +130,9 @@ static void report_window_load(Window *window) {
   snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[current_report].description);
   snprintf(report_buffer, sizeof(report_buffer), "%s (%s km)\n%s", time_buffer, dist_buffer, desc_buffer);
+
+  // Click functionality to scroll through reports
+  window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
