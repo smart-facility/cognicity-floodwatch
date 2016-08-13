@@ -91,7 +91,7 @@ static void back_click_handler(ClickRecognizerRef recognizer, void *context) {
   // Set selected item
   MenuIndex menu_index = {.section = 1, .row = current_report};
   menu_layer_set_selected_index(menu_layer, menu_index, MenuRowAlignCenter, false);
-  
+
   window_stack_remove(report_window, true);
   window_stack_push(listing_window, true);
 }
@@ -143,14 +143,16 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
 // Load report window
 static void report_window_load(Window *window) {
 
+  static char page_buffer[6]; //10/10
   static char dist_buffer[5]; //< 5.0
   static char time_buffer[6]; // hh:mm
   static char desc_buffer[160];
   static char report_buffer[160];
+  snprintf(page_buffer, sizeof(page_buffer), "%u/%lu", current_report+1, data_length);
   snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[current_report].distance);
   snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[current_report].description);
-  snprintf(report_buffer, sizeof(report_buffer), "%s (%s km)\n%s", time_buffer, dist_buffer, desc_buffer);
+  snprintf(report_buffer, sizeof(report_buffer), "%s (%s km) [%s]\n%s", time_buffer, dist_buffer, page_buffer, desc_buffer);
 
   // Click functionality to scroll through reports
   window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
