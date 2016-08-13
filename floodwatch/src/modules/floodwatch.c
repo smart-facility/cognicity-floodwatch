@@ -86,12 +86,23 @@ static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   }
 }
 
+// Down click handler
+static void back_click_handler(ClickRecognizerRef recognizer, void *context) {
+  // Set selected item
+  MenuIndex menu_index = {.section = 1, .row = current_report};
+  menu_layer_set_selected_index(menu_layer, menu_index, MenuRowAlignCenter, false);
+  
+  window_stack_remove(report_window, true);
+  window_stack_push(listing_window, true);
+}
+
 
 // Click configuration (currently disabled)
 static void click_config_provider(void *context) {
   //window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+  window_single_click_subscribe(BUTTON_ID_BACK, back_click_handler);
 }
 
 // Callback for number of menu sections
