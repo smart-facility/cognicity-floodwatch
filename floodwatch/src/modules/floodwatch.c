@@ -147,7 +147,7 @@ static void report_window_load(Window *window) {
   static char dist_buffer[5]; //< 5.0
   static char time_buffer[6]; // hh:mm
   static char desc_buffer[160];
-  static char report_buffer[160];
+  static char report_buffer[186]; // empirical max
   snprintf(page_buffer, sizeof(page_buffer), "%u/%lu", current_report+1, data_length);
   snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[current_report].distance);
   snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);

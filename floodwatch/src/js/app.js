@@ -15,8 +15,8 @@ var getUserLocation = function(callback){
         "properties": {},
         "geometry": {
           "type": "Point",
-          "coordinates": [pos.coords.longitude, pos.coords.latitude]
-          //"coordinates":[106.826355,-6.1763649] /*for testing - @MONAS*/
+          //"coordinates": [pos.coords.longitude, pos.coords.latitude]
+          "coordinates":[106.826355,-6.1763649] /*for testing - @MONAS*/
         }
     }
     callback(user_location);
@@ -62,7 +62,12 @@ var processReports = function(report_string, status){
             if (dist <= 5.0) {
               dist = dist.toFixed(1);
               pkey[i] = reports.features[i].properties.pkey;
-              text[i] = reports.features[i].properties.text.slice(0,160);
+              if (reports.features[i].properties.text.length > 160){
+                text[i] = reports.features[i].properties.text.slice(0,156)+'...'
+              }
+              else {
+                text[i] = reports.features[i].properties.text.slice(0,160);
+              }
               time[i] = reports.features[i].properties.created_at.slice(11,16);
               distance[i] = dist;
             }
@@ -70,7 +75,6 @@ var processReports = function(report_string, status){
         }
       }
       else {
-        console.log("("+user_location.code+") "+user_location.message);
         text[0] = '[Error] Could not detemine user location';
       }
     }
@@ -109,8 +113,8 @@ Pebble.addEventListener('ready',
   function(e) {
     console.log("PebbleKit JS ready!");
     // Request flood reports from API
-    var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
-    //var url = "http://127.0.0.1:8080/sample_reports.json"
+    //var url = "https://petajakarta.org/banjir/data/api/v2/reports/confirmed";
+    var url = "http://127.0.0.1:8080/sample_reports.json"
     xhrRequest(url, 'GET', processReports);
     }
 );
