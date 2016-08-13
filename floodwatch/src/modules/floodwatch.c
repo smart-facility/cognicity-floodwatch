@@ -56,11 +56,21 @@ static int16_t get_cell_height_callback(MenuLayer *menu_layer, MenuIndex *cell_i
 /*
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   window_set_background_color(report_window, GColorRajah);
-}
+}*/
 
 // Up click handler
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-}*/
+  if (current_report > 0){
+    current_report -= 1;
+    report_window = window_create();
+    window_set_window_handlers(report_window,(WindowHandlers){
+      .load = report_window_load,
+      .unload = report_window_unload
+    });
+    window_stack_remove(report_window, true);
+    window_stack_push(report_window, true);
+  }
+}
 
 // Down click handler
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -80,7 +90,7 @@ static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
 // Click configuration (currently disabled)
 static void click_config_provider(void *context) {
   //window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
-  //window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+  window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
 }
 
