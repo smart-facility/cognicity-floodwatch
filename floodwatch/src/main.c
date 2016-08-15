@@ -20,21 +20,21 @@ static void loading_window_load(Window *window) {
   GRect window_bounds = layer_get_bounds(window_layer);
 
   title_layer = text_layer_create(
-    GRect(0, 0,window_bounds.size.w, window_bounds.size.h));
+    GRect(0, (window_bounds.size.h/2)-28, window_bounds.size.w, window_bounds.size.h));
     text_layer_set_text_alignment(title_layer, GTextAlignmentCenter);
     text_layer_set_text(title_layer, "FloodWatch");
     text_layer_set_text_color(title_layer, GColorBlack);
     text_layer_set_background_color(title_layer, GColorClear);
-    text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+    text_layer_set_font(title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
     layer_add_child(window_layer, text_layer_get_layer(title_layer));
 
   subtitle_layer = text_layer_create(
-    GRect(0, (window_bounds.size.h/2)-15,window_bounds.size.w, window_bounds.size.h));
+    GRect(0, (window_bounds.size.h)-35,window_bounds.size.w, window_bounds.size.h));
     text_layer_set_text_alignment(subtitle_layer, GTextAlignmentCenter);
     text_layer_set_text(subtitle_layer, "loading...");
     text_layer_set_text_color(subtitle_layer, GColorBlack);
     text_layer_set_background_color(subtitle_layer, GColorClear);
-    text_layer_set_font(subtitle_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+    text_layer_set_font(subtitle_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
     layer_add_child(window_layer, text_layer_get_layer(subtitle_layer));
 }
 
