@@ -328,9 +328,6 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     snprintf(time_buffer, sizeof(time_buffer), "%s", time_tuple->value->cstring);
     snprintf(distance_buffer, sizeof(distance_buffer), "%s", distance_tuple->value->cstring);
 
-    APP_LOG(APP_LOG_LEVEL_INFO, distance_buffer);
-
-
     /* get the first token */
     time_vals = strtok(time_buffer, delim);
 
