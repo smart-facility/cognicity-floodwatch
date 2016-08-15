@@ -61,12 +61,13 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
   if (current_report > 0){
     current_report -= 1;
+    window_stack_remove(report_window, true);
+    window_destroy(report_window);
     report_window = window_create();
     window_set_window_handlers(report_window,(WindowHandlers){
       .load = report_window_load,
       .unload = report_window_unload
     });
-    window_stack_remove(report_window, true);
     window_stack_push(report_window, true);
   }
 }
@@ -75,12 +76,13 @@ static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   if (current_report < data_length-1){
     current_report += 1;
+    window_stack_remove(report_window, true);
+    window_destroy(report_window);
     report_window = window_create();
     window_set_window_handlers(report_window,(WindowHandlers){
       .load = report_window_load,
       .unload = report_window_unload
     });
-    window_stack_remove(report_window, true);
     window_stack_push(report_window, true);
   }
 }
@@ -90,9 +92,6 @@ static void back_click_handler(ClickRecognizerRef recognizer, void *context) {
   // Set selected item
   MenuIndex menu_index = {.section = 1, .row = current_report};
   menu_layer_set_selected_index(menu_layer, menu_index, MenuRowAlignCenter, false);
-  // reset menu layer click to defaults
-  menu_layer_set_click_config_onto_window(menu_layer, listing_window);
-
   window_stack_remove(report_window, true);
   window_destroy(report_window);
   window_stack_push(listing_window, true);
