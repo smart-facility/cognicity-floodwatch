@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /* FloodWatch - Flood alerts from PetaJakarta.org
  * floodwatch.js - Core application logic
  * (c) Hasitha Jayanandana, Tomas Holderness & Matthew Berryman 2016
@@ -22,35 +22,35 @@ var FloodWatch = {
 };
 
 // Get user location using Pebble/navigator API
-FloodWatch.getUserLocation = function(callback){
-  var self = this;
+FloodWatch.getLocation = function(callback){
+ var self = this; // Expects config to come from FloodWatch object
 
-  var watch_location = {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates" : []
-      }
-    };
+ var watch_location = {
+     "type": "Feature",
+     "properties": {},
+     "geometry": {
+       "type": "Point",
+       "coordinates" : []
+     }
+   };
 
-  var watch_location_status = 1;
+ var watch_location_status = 1;
 
-  function success(pos){
-    //watch_location.geometry.coordinates.push(106.826355,-6.1763649); // MONAS
-    //watch_location.geometry.coordinates.push(106.78839683532715,-6.176224966990518); // Tanjung Duren Utara
-    watch_location.geometry.coordinates.push(pos.coords.longitude, pos.coords.latitude);
+ function success(pos){
+   //watch_location.geometry.coordinates.push(106.826355,-6.1763649); // MONAS
+   //watch_location.geometry.coordinates.push(106.78839683532715,-6.176224966990518); // Tanjung Duren Utara
+   watch_location.geometry.coordinates.push(pos.coords.longitude, pos.coords.latitude);
 
-    watch_location_status = 0;
-    callback(watch_location, watch_location_status);
-  }
+   watch_location_status = 0;
+   callback(watch_location, watch_location_status);
+ }
 
-  function error(){
-    watch_location_status = 1;
-    callback(watch_location, watch_location_status);
-  }
+ function error(){
+   watch_location_status = 1;
+   callback(watch_location, watch_location_status);
+ }
 
-  navigator.geolocation.getCurrentPosition(success, error, self.config.location);
+ navigator.geolocation.getCurrentPosition(success, error, self.config.location);
 };
 
 // Process flood data & user location, returns Pebble dictionary for callback
@@ -65,8 +65,7 @@ FloodWatch.processReports = function(report_string, report_status, callback){
       distance : []
     };
 
-    self.getUserLocation(
-      function(watch_location, watch_location_status){
+    var filterReportsByLocation = function(watch_location, watch_location_status){
         if (report_status !== 200){
           console.log('Error communicating with server ('+report_status+')');
           reports_dictionary.text[0] = '[Error '+report_status+'] Problem communicating with server';
@@ -112,6 +111,6 @@ FloodWatch.processReports = function(report_string, report_status, callback){
         };
         callback(pebble_dictionary);
       }
-  );
+      self.getLocation(filterReportsByLocation);
 };
 module.exports = FloodWatch;

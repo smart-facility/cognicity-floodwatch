@@ -1,41 +1,49 @@
 {
-    "author": "PetaJakarta.org",
-    "dependencies": {},
-    "devDependencies":{
-      "jshint": "^2.9.3"
+  "author": "PetaJakarta.org",
+  "dependencies": {},
+  "devDependencies": {
+    "jshint": "^2.9.3",
+    "mocha": "^3.0.2",
+    "unit.js": "^2.0.0"
+  },
+  "keywords": [
+    "flood",
+    "flooding",
+    "jakarta",
+    "PetaJakarta"
+  ],
+  "name": "FloodWatch",
+  "version": "0.4.0",
+  "pebble": {
+    "capabilities": [
+      "location"
+    ],
+    "displayName": "FloodWatch",
+    "enableMultiJS": true,
+    "messageKeys": {
+      "KEY_PKEY": 1,
+      "KEY_DISTANCE": 2,
+      "KEY_TIME": 3,
+      "KEY_DESCRIPTION": 4,
+      "KEY_DATA_LENGTH": 5
     },
-    "keywords": ["flood", "flooding", "jakarta", "PetaJakarta"],
-    "name": "FloodWatch",
-    "version": "0.4.0",
-    "pebble": {
-        "capabilities": [
-            "location"
-        ],
-        "displayName": "FloodWatch",
-        "enableMultiJS": true,
-        "messageKeys": {
-            "KEY_PKEY": 1,
-            "KEY_DISTANCE": 2,
-            "KEY_TIME": 3,
-            "KEY_DESCRIPTION": 4,
-            "KEY_DATA_LENGTH": 5
-        },
-        "projectType": "native",
-        "resources": {
-            "media": []
-        },
-        "sdkVersion": "3",
-        "targetPlatforms": [
-            "aplite",
-            "basalt"
-        ],
-        "uuid": "a0ba102c-a42c-4f76-ad5f-9607f74fa890",
-        "watchapp": {
-            "watchface": false
-        }
+    "projectType": "native",
+    "resources": {
+      "media": []
     },
-    "scripts": {
-      "lint": "jshint ./src/js/floodwatch.js",
-      "test": "npm run lint --silent"
+    "sdkVersion": "3",
+    "targetPlatforms": [
+      "aplite",
+      "basalt"
+    ],
+    "uuid": "a0ba102c-a42c-4f76-ad5f-9607f74fa890",
+    "watchapp": {
+      "watchface": false
     }
+  },
+  "scripts": {
+    "lint": "jshint ./src/js/floodwatch.js",
+    "mocha": "mocha test",
+    "test": "npm run lint --silent"
+  }
 }
