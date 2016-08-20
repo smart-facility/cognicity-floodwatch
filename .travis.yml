@@ -24,7 +24,7 @@ install: ./scripts/ciinstall
 
 before_script:
  - chmod +x ./scripts/cibuild
-script: ./scripts/cibuild
+script: ./scripts/cibuild && cd floodwatch && npm install && npm run test
 
 env:
   global:
