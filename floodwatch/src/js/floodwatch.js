@@ -110,7 +110,7 @@ FloodWatch.processReports = function(report_string, report_status, callback){
           "KEY_DATA_LENGTH": (reports_dictionary.pkey.length).toString()
         };
         callback(pebble_dictionary);
-      }
+      };
       self.getLocation(filterReportsByLocation);
 };
 module.exports = FloodWatch;
