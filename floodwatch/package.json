@@ -1,11 +1,7 @@
 {
   "author": "PetaJakarta.org",
   "dependencies": {},
-  "devDependencies": {
-    "jshint": "^2.9.3",
-    "mocha": "^3.0.2",
-    "unit.js": "^2.0.0"
-  },
+  "devDependencies": {},
   "keywords": [
     "flood",
     "flooding",
