@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /* FloodWatch - Flood alerts from PetaJakarta.org
  * floodwatch.js - Core application logic
  * (c) Hasitha Jayanandana, Tomas Holderness & Matthew Berryman 2016
@@ -19,7 +19,7 @@ var FloodWatch = {
       timeout: 10000
     }
   }
-}
+};
 
 // Get user location using Pebble/navigator API
 FloodWatch.getUserLocation = function(callback){
@@ -51,7 +51,7 @@ FloodWatch.getUserLocation = function(callback){
   }
 
   navigator.geolocation.getCurrentPosition(success, error, self.config.location);
-}
+};
 
 // Process flood data & user location, returns Pebble dictionary for callback
 FloodWatch.processReports = function(report_string, report_status, callback){
@@ -97,7 +97,7 @@ FloodWatch.processReports = function(report_string, report_status, callback){
                   reports_dictionary.text[j] = reports.features[i].properties.text.slice(0,160);
                 }
                 reports_dictionary.time[j] = reports.features[i].properties.created_at.slice(11,16);
-                j += 1 // increment dictionary counter
+                j += 1; // increment dictionary counter
               }
             }
           }
@@ -112,6 +112,6 @@ FloodWatch.processReports = function(report_string, report_status, callback){
         };
         callback(pebble_dictionary);
       }
-  )
-}
+  );
+};
 module.exports = FloodWatch;
