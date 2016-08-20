@@ -1,5 +1,5 @@
 'use strict';
-/* Floodwatch - Flood alerts from PetaJakarta.org
+/* FloodWatch - Flood alerts from PetaJakarta.org
  * floodwatch.js - Core application logic
  * (c) Hasitha Jayanandana, Tomas Holderness & Matthew Berryman 2016
  * Released under GNU GPLv3 (see LICENSE.txt)
@@ -114,5 +114,4 @@ FloodWatch.processReports = function(report_string, report_status, callback){
       }
   )
 }
-
 module.exports = FloodWatch;

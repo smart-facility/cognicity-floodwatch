@@ -1,5 +1,5 @@
 'use strict';
-// Floodwatch - Flood alerts from PetaJakarta.org
+// FloodWatch - Flood alerts from PetaJakarta.org
 // app.js - JavaScript app for mobile
 // (c) Hasitha Jayanandana, Tomas Holderness & Matthew Berryman 2016
 // Released under GNU GPLv3 (see LICENSE.txt)
