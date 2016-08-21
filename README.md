@@ -65,7 +65,7 @@ maximum of 227 characters.
 Using the [Pebble SDK formula](https://developer.pebble.com/docs/c/Foundation/Dictionary/#dict_calc_buffer_size) we estimate that a maximum of 2220 bytes are needed per message.
 
 ### Artwork and App Resources
-Artwork for the Pebble app store are in the `app_resources` folder.
+Artwork for the Pebble app store are in the `app_resources` folder. Raw image files are in GIMP .xcf format.
 
 ### Contributors
 This project was funded by a University of Wollongong, Faculty of Engineering and Information Sciences summer scholarship awarded to [Hasitha Jayanandana](https://github.com/hasithaj) and supervised by [Tomas Holderness](https://github.com/talltom) & [Matthew Berryman](https://github.com/matthewberryman) at the [SMART Open Source Geospatial Lab](http://smart.uow.edu.au/osgeo/index.html).
