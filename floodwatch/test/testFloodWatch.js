@@ -20,7 +20,7 @@ describe("processReports error status handling", function(){
     oldGetLocation = FloodWatch.getLocation;
     FloodWatch.getLocation = function(callback){
       callback('location', 1);
-    }
+    };
   });
   // Test reports status handling
   it( 'Catches error value in reports data status != 200', function(){
@@ -32,7 +32,7 @@ describe("processReports error status handling", function(){
   it ('Catches error value in watch location data != 0', function(){
     FloodWatch.processReports('test', 200, function(data){
       test.value( data.KEY_DESCRIPTION ).is('[Error] Could not detemine\nwatch location');
-    })
+    });
   });
   // Return location function to normal
   after ( function(){
@@ -47,16 +47,20 @@ describe("processReports null data handling", function(){
     oldGetLocation = FloodWatch.getLocation;
     FloodWatch.getLocation = function(callback){
       callback('location', 1);
-    }
+    };
   });
   // Test null data handling
   it ('Catches empty reports data', function(){
     FloodWatch.processReports('{"features": null}', 200, function(data){
       test.value( data.KEY_DESCRIPTION ).is('[Error] Could not detemine\nwatch location');
-    })
+    });
   });
   // Return location function to normal
   after ( function(){
     FloodWatch.getLocation = oldGetLocation;
   });
 });
+
+//describe("processReport data handling and filtering", function(){
+
+//})

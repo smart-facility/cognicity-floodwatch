@@ -38,7 +38,7 @@
     }
   },
   "scripts": {
-    "lint": "jshint ./src/js/**.js",
+    "lint": "jshint ./src/js/**.js ./test/**.js",
     "mocha": "mocha test",
     "test": "npm run lint --silent && npm run mocha"
   }
