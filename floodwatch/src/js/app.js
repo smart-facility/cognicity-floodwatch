@@ -9,11 +9,18 @@ var FloodWatch = require('./floodwatch.js');
 // AJAX Requests
 var xhrRequest = function (url, type, callback) {
   var xhr = new XMLHttpRequest();
+  xhr.open(type, url, true); // true makes the request asyncronous
   xhr.onload = function () {
     callback(this.responseText, this.status);
+    clearTimeout(timeout);
   };
-  xhr.open(type, url);
-  xhr.send();
+  xhr.send(null);
+  var timeout = setTimeout(function(){
+    xhr.abort();
+    console.log('[Error] Problem communicating with server');
+    callback('Request timed out', 418)},
+    5000 // timeout in ms
+  );
 };
 
 // Listen for when the watchapp is opened
