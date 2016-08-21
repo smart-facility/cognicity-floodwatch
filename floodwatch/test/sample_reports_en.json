@@ -6,5 +6,5 @@
 {"type":"Feature","geometry":{"type":"Point","coordinates":[106.826,-6.17]},"properties":
 {"pkey":3,"created_at":"2016-08-19T12:48:00","source":"qlue","status":"confirmed","url":null,"title":"Sample flood report","text":"Flooding here severe. Much of the area is submerged."}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[106.8498,-6.139]},"properties":
-{"pkey":3,"created_at":"2016-08-19T12:34:00","source":"qlue","status":"confirmed","url":null,"title":"Sample flood report","text":"Extreme flooding - canal levees are failing, water is innundating the road"}}
+{"pkey":3,"created_at":"2016-08-19T12:34:00","source":"qlue","status":"confirmed","url":null,"title":"Sample flood report","text":"Extreme flooding - canal levees are failing, water is inundating the road"}}
 ]}
