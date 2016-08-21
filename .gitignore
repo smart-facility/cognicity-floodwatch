@@ -39,3 +39,6 @@ floodwatch/build
 
 # Ignore waf lock file
 .lock-waf*
+
+# Ignore node modules
+node_modules/
