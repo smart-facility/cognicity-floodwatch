@@ -18,7 +18,8 @@ var xhrRequest = function (url, type, callback) {
   var timeout = setTimeout(function(){
     xhr.abort();
     console.log('[Error] Problem communicating with server');
-    callback('Request timed out', 418)},
+    callback('Request timed out', 418);
+    },
     5000 // timeout in ms
   );
 };
