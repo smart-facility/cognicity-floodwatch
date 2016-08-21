@@ -11,3 +11,7 @@ extern void inbox_dropped_callback(AppMessageResult reason, void *context);
 extern void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResult reason, void *context);
 // Logging for outgoing data handling
 extern void outbox_sent_callback(DictionaryIterator *iterator, void *context);
+// Load report window
+static void report_window_load(Window *window);
+// Unload report window
+static void report_window_unload(Window *window);

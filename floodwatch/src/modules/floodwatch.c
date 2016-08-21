@@ -12,16 +12,15 @@ typedef struct {
   char *description;
 } Floodinfo;
 
-static Floodinfo flood_info[256] = {};
+static Floodinfo flood_info[10] = {};
 
 static long data_length;
-static char description_buffer[1024];
-
+static char description_buffer[1609];
 
 // UI Elements
 static Window *listing_window, *report_window, *message_window;
 static MenuLayer *menu_layer;
-static TextLayer *report_text_layer, *message_text_layer;
+static TextLayer *report_text_layer, *message_text_layer, *footer_text_layer, *time_text_layer, *distance_text_layer;
 
 // Define Key Values for dictionary to obtain variables from the javascript code
 #define KEY_PKEY 1
@@ -29,8 +28,6 @@ static TextLayer *report_text_layer, *message_text_layer;
 #define KEY_TIME 3
 #define KEY_DESCRIPTION 4
 #define KEY_DATA_LENGTH 5
-
-static uint16_t key_data_length;
 
 // Create variable to store the index of the currenly selected menu item
 static int current_report = 0;
@@ -58,24 +55,55 @@ static int16_t get_cell_height_callback(MenuLayer *menu_layer, MenuIndex *cell_i
 /*
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   window_set_background_color(report_window, GColorRajah);
-}
+}*/
 
 // Up click handler
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  if (current_report > 0){
+    current_report -= 1;
+    window_stack_remove(report_window, true);
+    window_destroy(report_window);
+    report_window = window_create();
+    window_set_window_handlers(report_window,(WindowHandlers){
+      .load = report_window_load,
+      .unload = report_window_unload
+    });
+    window_stack_push(report_window, true);
+  }
 }
 
 // Down click handler
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
+  if (current_report < data_length-1){
+    current_report += 1;
+    window_stack_remove(report_window, true);
+    window_destroy(report_window);
+    report_window = window_create();
+    window_set_window_handlers(report_window,(WindowHandlers){
+      .load = report_window_load,
+      .unload = report_window_unload
+    });
+    window_stack_push(report_window, true);
+  }
 }
-*/
+
+// Down click handler
+static void back_click_handler(ClickRecognizerRef recognizer, void *context) {
+  // Set selected item
+  MenuIndex menu_index = {.section = 1, .row = current_report};
+  menu_layer_set_selected_index(menu_layer, menu_index, MenuRowAlignCenter, false);
+  window_stack_remove(report_window, true);
+  window_destroy(report_window);
+  window_stack_push(listing_window, true);
+}
+
 
 // Click configuration (currently disabled)
-/*
 static void click_config_provider(void *context) {
-  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
-}*/
+  window_single_click_subscribe(BUTTON_ID_BACK, back_click_handler);
+}
 
 // Callback for number of menu sections
 extern uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data){
@@ -103,9 +131,9 @@ static void menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, ui
 // Draw row
 static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
 
-  static char dist_buffer[15];
+  static char dist_buffer[16];
   static char desc_buffer[25];
-  snprintf(dist_buffer, sizeof(dist_buffer), "%s (%s km)", flood_info[cell_index[0].row].time, flood_info[cell_index[0].row].distance);
+  snprintf(dist_buffer, sizeof(dist_buffer), "%s · %s km", flood_info[cell_index[0].row].time, flood_info[cell_index[0].row].distance);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[cell_index[0].row].description);
 
   menu_cell_basic_draw(ctx, cell_layer, dist_buffer, desc_buffer, NULL);
@@ -114,33 +142,70 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
 
 // Load report window
 static void report_window_load(Window *window) {
-  // No click functionality at the moment
-  //window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
-  static char dist_buffer[4]; //< 5.0
+  static char page_buffer[6]; //10/10
+  static char dist_buffer[8]; //5.0 km
   static char time_buffer[6]; // hh:mm
-  static char desc_buffer[140]; //tweet
-  static char report_buffer[147]; // 140 + 5 +2
-  snprintf(dist_buffer, sizeof(dist_buffer), "%s", flood_info[current_report].distance);
+  static char desc_buffer[160];
+  snprintf(page_buffer, sizeof(page_buffer), "%u/%lu", current_report+1, data_length);
+  snprintf(dist_buffer, sizeof(dist_buffer), "%s km", flood_info[current_report].distance);
   snprintf(time_buffer, sizeof(time_buffer), "%s", flood_info[current_report].time);
   snprintf(desc_buffer, sizeof(desc_buffer), "%s", flood_info[current_report].description);
-  snprintf(report_buffer, sizeof(report_buffer), "%s (%s km)\n%s", time_buffer, dist_buffer, desc_buffer);
+
+  // Click functionality to scroll through reports
+  window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
   GRect window_bounds = layer_get_bounds(window_layer);
 
+  distance_text_layer = text_layer_create(
+    GRect(0, 0, window_bounds.size.w, 22));
+
+  text_layer_set_text_alignment(distance_text_layer, GTextAlignmentCenter);
+  text_layer_set_text_color(distance_text_layer, GColorWhite);
+  text_layer_set_background_color(distance_text_layer, GColorBlack);
+  text_layer_set_font(distance_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text_alignment(distance_text_layer, GTextAlignmentRight);
+  text_layer_set_text(distance_text_layer, dist_buffer);
+
+  layer_add_child(window_layer, text_layer_get_layer(distance_text_layer));
+
+  time_text_layer = text_layer_create(
+    GRect(0, 0, window_bounds.size.w-45, 22));
+
+  text_layer_set_text_alignment(time_text_layer, GTextAlignmentCenter);
+  text_layer_set_text_color(time_text_layer, GColorWhite);
+  text_layer_set_background_color(time_text_layer, GColorBlack);
+  text_layer_set_font(time_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text_alignment(time_text_layer, GTextAlignmentLeft);
+  text_layer_set_text(time_text_layer, time_buffer);
+
+  layer_add_child(window_layer, text_layer_get_layer(time_text_layer));
+
   report_text_layer = text_layer_create(
-    GRect(0, 0,window_bounds.size.w, window_bounds.size.h));
+    GRect(0, 22, window_bounds.size.w, window_bounds.size.h-20));
 
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentCenter);
   text_layer_set_text_color(report_text_layer, GColorWhite);
   text_layer_set_background_color(report_text_layer, GColorBlack);
   text_layer_set_font(report_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(report_text_layer, GTextAlignmentLeft);
-  text_layer_set_text(report_text_layer, report_buffer);
+  text_layer_set_text(report_text_layer, desc_buffer);
 
   layer_add_child(window_layer, text_layer_get_layer(report_text_layer));
+
+  footer_text_layer = text_layer_create(
+    GRect(0,window_bounds.size.h-20,window_bounds.size.w, 20));
+
+    text_layer_set_text_alignment(footer_text_layer, GTextAlignmentCenter);
+    text_layer_set_text_color(footer_text_layer, GColorWhite);
+    text_layer_set_background_color(footer_text_layer, GColorBlack);
+    text_layer_set_font(footer_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+    text_layer_set_text_alignment(footer_text_layer, GTextAlignmentRight);
+    text_layer_set_text(footer_text_layer, page_buffer);
+
+    layer_add_child(window_layer, text_layer_get_layer(footer_text_layer));
 }
 
 // Unload report window
@@ -151,8 +216,6 @@ static void report_window_unload(Window *window) {
 
 // Load report window
 static void message_window_load(Window *window) {
-  // No click functionality at the moment
-  //window_set_click_config_provider(window, (ClickConfigProvider) click_config_provider);
 
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
@@ -242,9 +305,9 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
   else if (data_length > 0) {
     // Store incoming information
-    static char pkey_buffer[1024]; // *TODO* Needs adjusting
-    static char time_buffer[1024];
-    static char distance_buffer[1024];
+    static char pkey_buffer[209]; // *TODO* Needs adjusting
+    static char time_buffer[69];
+    static char distance_buffer[40];
 
     char *pkey_vals;
     char *time_vals;
@@ -261,7 +324,7 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
     Tuple *time_tuple = dict_find(iterator, KEY_TIME);
     Tuple *distance_tuple = dict_find(iterator, KEY_DISTANCE);
 
-    snprintf(pkey_buffer, sizeof(pkey_buffer), "%s", time_tuple->value->cstring);
+    snprintf(pkey_buffer, sizeof(pkey_buffer), "%s", pkey_tuple->value->cstring);
     snprintf(time_buffer, sizeof(time_buffer), "%s", time_tuple->value->cstring);
     snprintf(distance_buffer, sizeof(distance_buffer), "%s", distance_tuple->value->cstring);
 

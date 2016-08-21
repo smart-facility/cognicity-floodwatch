@@ -33,3 +33,12 @@
 
 # DS_Store
 .DS_Store
+
+# Ignore build generated files
+floodwatch/build
+
+# Ignore waf lock file
+.lock-waf*
+
+# Ignore node modules
+node_modules/

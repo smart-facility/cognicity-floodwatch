@@ -1,0 +1,4 @@
+{"type":"FeatureCollection","features":[
+{"type":"Feature","geometry":{"type":"Point","coordinates":[55,-1]},"properties":
+{"pkey":1,"created_at":"2015-11-27T13:16:51","source":"qlue","status":"confirmed","url":null,"title":"Sample flood report","text":"1 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla odio elit, semper nec purus et, facilisis dignissim arcu. In urna ante, sollicitudin ut sodales mollis, facilisis vel mauris. Sed consequat sed lectus sit amet consequat. Donec a dictum ante. Nullam consectetur posuere nulla, quis consectetur dui. Pellentesque et pharetra lorem, vitae lobortis velit. Phasellus vitae turpis magna. Donec sagittis justo eget odio pulvinar luctus. Vestibulum nisl felis, tristique eu euismod a, condimentum non metus. Sed et felis lacinia, condimentum ligula sit amet, feugiat risus. Donec finibus dignissim urna in sagittis."}}
+]}

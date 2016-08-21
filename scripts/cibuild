@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -e # halt script on error
+
+cd ./floodwatch # move to project directory
+
+# JavaScript tests
+npm install jshint@^2.9.3 mocha@^3.0.2 unit.js@^2.0.0
+npm test
+
+# Pipe 'yes' into pebble tool to accept terms and conditions
+yes | ../pebble-dev/pebble-sdk-$PEBBLE_TOOL-linux64/bin/pebble build
