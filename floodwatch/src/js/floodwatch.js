@@ -37,8 +37,6 @@ FloodWatch.getLocation = function(callback){
  var watch_location_status = 1;
 
  function success(pos){
-   //watch_location.geometry.coordinates.push(106.826355,-6.1763649); // MONAS
-   //watch_location.geometry.coordinates.push(106.78839683532715,-6.176224966990518); // Tanjung Duren Utara
    watch_location.geometry.coordinates.push(pos.coords.longitude, pos.coords.latitude);
 
    watch_location_status = 0;
