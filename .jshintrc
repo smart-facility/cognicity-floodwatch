@@ -94,5 +94,5 @@
     "yui"           : false,    // Yahoo User Interface
 
     // Custom Globals
-    "globals"       : {}        // additional predefined global variables
+    "globals"       : {"Pebble": true}        // additional predefined global variables
 }

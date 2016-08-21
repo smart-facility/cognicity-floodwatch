@@ -38,7 +38,7 @@
     }
   },
   "scripts": {
-    "lint": "jshint ./src/js/floodwatch.js",
+    "lint": "jshint ./src/js/**.js",
     "mocha": "mocha test",
     "test": "npm run lint --silent && npm run mocha"
   }
