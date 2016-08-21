@@ -1,0 +1,10 @@
+{"type":"FeatureCollection","features":[
+{"type":"Feature","geometry":{"type":"Point","coordinates":[106.832291,-6.137071]},"properties":
+{"pkey":1,"created_at":"2016-08-19T13:16:00","source":"qlue","status":"confirmed","url":null,"title":"Sample flood report","text":"After heavy rainfall there is now water across the road"}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[106.826,-6.15]},"properties":
+{"pkey":2,"created_at":"2016-08-19T13:02:00","source":"qlue","status":"confirmed","url":null,"title":"Sample flood report","text":"Flood waters are now more than 1.5 meters in the Cibubur area - East Jakarta"}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[106.826,-6.17]},"properties":
+{"pkey":3,"created_at":"2016-08-19T12:48:00","source":"qlue","status":"confirmed","url":null,"title":"Sample flood report","text":"Flooding here severe. Much of the area is submerged."}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[106.8498,-6.139]},"properties":
+{"pkey":3,"created_at":"2016-08-19T12:34:00","source":"qlue","status":"confirmed","url":null,"title":"Sample flood report","text":"Extreme flooding - canal levees are failing, water is innundating the road"}}
+]}
