@@ -36,10 +36,11 @@ Pebble Tool v4.3 (active SDK: 3.14)
 #### Git Hooks
 There is a git pre-commit hook which will run the 'npm test' command before your commit and will fail the commit if testing fails.
 
-To use this hook, copy the file from 'git-hooks/pre-commit' to '.git/hooks/pre-commit' in your project folder.
+To use this hook, copy the file from 'git-hooks/pre-commit' to '.git/hooks/pre-commit' in your project folder, and make it executable.
 
 ```shell
 cp git-hooks/pre-commit .git/hooks/
+chmod u+x .git/hooks/pre-commit
 ```
 
 ### Dependencies
