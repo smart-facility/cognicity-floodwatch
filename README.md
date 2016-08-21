@@ -33,6 +33,14 @@ Pebble Tool v4.3 (active SDK: 3.14)
 `npm mocha`
 #### Run all tests
 `npm test`
+#### Git Hooks
+There is a git pre-commit hook which will run the 'npm test' command before your commit and will fail the commit if testing fails.
+
+To use this hook, copy the file from 'git-hooks/pre-commit' to '.git/hooks/pre-commit' in your project folder.
+
+```shell
+cp git-hooks/pre-commit .git/hooks/
+```
 
 ### Dependencies
 The following dependencies are required by the app. Note that as Pebble `merge_js` concatenates all JavaScript files stripped down versions of libraries must be created, and placed in `src/js/libs`.
