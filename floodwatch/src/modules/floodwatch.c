@@ -3,6 +3,7 @@
 #include "libs/strdup.h"
 #include "libs/strtok.h"
 #include "modules/floodwatch.h"
+#include "windows/message.h"
 
 // Initialize a structure to store the flood data values
 typedef struct {
@@ -20,7 +21,7 @@ static char description_buffer[1609];
 // UI Elements
 static Window *listing_window, *report_window, *message_window;
 static MenuLayer *menu_layer;
-static TextLayer *report_text_layer, *message_text_layer, *footer_text_layer, *time_text_layer, *distance_text_layer;
+static TextLayer *report_text_layer, *footer_text_layer, *time_text_layer, *distance_text_layer;
 
 // Define Key Values for dictionary to obtain variables from the javascript code
 #define KEY_PKEY 1
@@ -189,32 +190,6 @@ static void report_window_unload(Window *window) {
   text_layer_destroy(report_text_layer);
 }
 
-// Load report window
-static void message_window_load(Window *window) {
-
-  // Get information about the Window
-  Layer *window_layer = window_get_root_layer(window);
-  GRect window_bounds = layer_get_bounds(window_layer);
-
-  message_text_layer = text_layer_create(
-    GRect(0, (window_bounds.size.h/2)-20, window_bounds.size.w, window_bounds.size.h));
-
-  text_layer_set_text_alignment(message_text_layer, GTextAlignmentCenter);
-  text_layer_set_text_color(message_text_layer, GColorBlack);
-  text_layer_set_background_color(message_text_layer, GColorWhite);
-  text_layer_set_font(message_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
-  text_layer_set_text_alignment(message_text_layer, GTextAlignmentCenter);
-  text_layer_set_text(message_text_layer, description_buffer);
-
-  layer_add_child(window_layer, text_layer_get_layer(message_text_layer));
-}
-
-// Unload report window
-static void message_window_unload(Window *window) {
-  layer_remove_child_layers(window_get_root_layer(window));
-  text_layer_destroy(message_text_layer);
-}
-
 // Select click
 static void select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *callback_context) {
   current_report = cell_index[0].row;
@@ -267,8 +242,8 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
   snprintf(description_buffer, sizeof(description_buffer), "%s", description_tuple->value->cstring);
 
   if (data_length == 0) {
-
     message_window = window_create();
+    window_set_user_data(message_window, description_buffer);
     window_set_window_handlers(message_window, (WindowHandlers){
       .load = message_window_load,
       .unload = message_window_unload

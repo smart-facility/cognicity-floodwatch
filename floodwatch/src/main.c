@@ -1,17 +1,19 @@
 #include <pebble.h>
 #include "modules/floodwatch.h"
+#include "windows/message.h"
 
 // CogniCity Floodwatch - Flood Alerts to Pebble Smart Watch from PetaJakarta.org
 // (c) Hasitha Jayanandana, Tomas Holderness & Matthew Berryman 2016
 // Released under GNU GPLv3 (see LICENSE.txt)
 
 // Define the App elemments for the Main Window and Report window
-Window *loading_window;
+Window *loading_window, *message_window;
 static TextLayer *title_layer, *subtitle_layer;
 
 // Constants for data transfer
 static int INBOX_SIZE = 2220; //originally defined as const, needs fixing.
 static int OUTBOX_SIZE = 1; //originally defined as const
+static char message_buffer[50];
 
 // loading_window_load
 static void loading_window_load(Window *window) {
@@ -59,9 +61,21 @@ extern void init_windows(void) {
   app_message_register_inbox_received(inbox_received_callback);
   app_message_register_inbox_dropped(inbox_dropped_callback);
 
-  app_message_open(INBOX_SIZE, OUTBOX_SIZE);
   bool app_connection = connection_service_peek_pebble_app_connection();
-  APP_LOG(APP_LOG_LEVEL_INFO, "%d", app_connection);
+  if (app_connection == 1){
+     app_message_open(INBOX_SIZE, OUTBOX_SIZE);
+  }
+  else {
+    snprintf(message_buffer, sizeof(message_buffer), "%s", "[Error] No bluetooth connection available");
+    message_window = window_create();
+    window_set_user_data(message_window, message_buffer);
+    window_set_window_handlers(message_window, (WindowHandlers){
+      .load = message_window_load,
+      .unload = message_window_unload
+    });
+    window_stack_remove(loading_window, false);
+    window_stack_push(message_window, true);
+  }
 }
 
 // Deinitialise windows

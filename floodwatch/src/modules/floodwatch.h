@@ -15,3 +15,7 @@ extern void outbox_sent_callback(DictionaryIterator *iterator, void *context);
 static void report_window_load(Window *window);
 // Unload report window
 static void report_window_unload(Window *window);
+// Load report window
+void message_window_load(Window *window);
+// Unload report window
+void message_window_unload(Window *window);
