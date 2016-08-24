@@ -60,6 +60,8 @@ extern void init_windows(void) {
   app_message_register_inbox_dropped(inbox_dropped_callback);
 
   app_message_open(INBOX_SIZE, OUTBOX_SIZE);
+  bool app_connection = connection_service_peek_pebble_app_connection();
+  APP_LOG(APP_LOG_LEVEL_INFO, "%d", app_connection);
 }
 
 // Deinitialise windows
