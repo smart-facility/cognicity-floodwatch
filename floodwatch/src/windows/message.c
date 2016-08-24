@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include "./windows/message.h"
 
+static Window *message_window;
 static TextLayer *message_text_layer;
 
 // Load report window, expects a message (string buffer) to be attached via window_set_user_data()
@@ -27,4 +28,20 @@ void message_window_load(Window *window) {
 void message_window_unload(Window *window) {
   layer_remove_child_layers(window_get_root_layer(window));
   text_layer_destroy(message_text_layer);
+}
+
+void message_window_push(char *message_buffer){
+  message_window = window_create();
+  window_set_user_data(message_window, message_buffer);
+  window_set_window_handlers(message_window,(WindowHandlers){
+    .load = message_window_load,
+    .unload = message_window_unload
+  });
+
+  window_stack_push(message_window, true);
+}
+
+void message_window_pull(){
+  window_stack_remove(message_window, false);
+  window_destroy(message_window);
 }

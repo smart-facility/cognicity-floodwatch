@@ -20,7 +20,7 @@ static long data_length;
 static char description_buffer[1609];
 
 // UI Elements
-static Window *listing_window, *report_window, *message_window;
+static Window *listing_window, *report_window;
 static MenuLayer *menu_layer;
 static TextLayer *report_text_layer, *footer_text_layer, *time_text_layer, *distance_text_layer;
 
@@ -243,15 +243,8 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
   snprintf(description_buffer, sizeof(description_buffer), "%s", description_tuple->value->cstring);
 
   if (data_length == 0) {
-    message_window = window_create();
-    window_set_user_data(message_window, description_buffer);
-    window_set_window_handlers(message_window, (WindowHandlers){
-      .load = message_window_load,
-      .unload = message_window_unload
-    });
-    //window_stack_remove(splash_window, false);
     splash_window_pull();
-    window_stack_push(message_window, true);
+    message_window_push(description_buffer);
   }
 
   else if (data_length > 0) {

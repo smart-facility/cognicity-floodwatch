@@ -7,8 +7,6 @@
 // Released under GNU GPLv3 (see LICENSE.txt)
 
 // Define the App elemments for the Main Window and Report window
-static Window *message_window;
-
 // Constants for data transfer
 static int INBOX_SIZE = 2220; //originally defined as const, needs fixing.
 static int OUTBOX_SIZE = 1; //originally defined as const
@@ -28,15 +26,8 @@ extern void init_windows(void) {
   }
   else {
     snprintf(message_buffer, sizeof(message_buffer), "%s", "[Error] No bluetooth connection available");
-    message_window = window_create();
-    window_set_user_data(message_window, message_buffer);
-    window_set_window_handlers(message_window, (WindowHandlers){
-      .load = message_window_load,
-      .unload = message_window_unload
-    });
     splash_window_pull();
-    window_stack_push(message_window, true);
-
+    message_window_push(message_buffer);
   }
 }
 
