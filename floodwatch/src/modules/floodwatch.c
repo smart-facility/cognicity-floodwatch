@@ -4,6 +4,7 @@
 #include "libs/strtok.h"
 #include "modules/floodwatch.h"
 #include "windows/message.h"
+#include "windows/splash.h"
 
 // Initialize a structure to store the flood data values
 typedef struct {
@@ -248,7 +249,8 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
       .load = message_window_load,
       .unload = message_window_unload
     });
-    window_stack_remove(loading_window, false);
+    //window_stack_remove(splash_window, false);
+    splash_window_pull();
     window_stack_push(message_window, true);
   }
 
@@ -332,7 +334,7 @@ extern void inbox_received_callback(DictionaryIterator *iterator, void *context)
         .unload = listing_window_unload
     });
 
-    window_stack_remove(loading_window, false);
+    splash_window_pull();
     window_stack_push(listing_window, true);
   }
 }
