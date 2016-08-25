@@ -1,3 +1,8 @@
 #!/bin/sh
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 
-cd ./floodwatch && npm test
+if [ "$BRANCH" == "master" ]; then
+  cd ./floodwatch && npm test
+fi;
+
+exit 0
