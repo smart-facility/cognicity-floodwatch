@@ -85,7 +85,7 @@ The most convenient method to run FloodWatch is the online Pebble Development ap
 
 * CloudPebble requires a pebble account to login and run the pebble application.
 * Upon importing the repository from github compile the files using the Compilation tab and set the emulator to *Basalt* or *Aplite*.
-*. Real time logs for the application can be viewed using the *View App Logs* tab.
+* Real time logs for the application can be viewed using the *View App Logs* tab.
 
 #### Local SDK
 The Pebble SDK runs on the UNIX terminal. The SDK can be downloaded from https://developer.pebble.com and manually installed or can be directly installed from the terminal using Homebrew. The website contains instructions for the installation of the SDK using both methods.
