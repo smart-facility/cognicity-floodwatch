@@ -3,6 +3,11 @@
 # under an MIT license
 # includes scripts/cibuild & ciinstall
 
+#safelist
+branches:
+  only:
+    - master
+
 sudo: false
 
 language: python
